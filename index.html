@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch → Python · Kurikulum Pemrograman</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D0D14;
+    --ink2: #16161F;
+    --ink3: #1E1E2E;
+    --fog: #94A3B8;
+    --mist: #64748B;
+    --smoke: #334155;
+    --paper: #F8F7FF;
+    --white: #FFFFFF;
+    --border: rgba(255,255,255,0.07);
+
+    --sd: #FF6B35;
+    --sd-glow: rgba(255,107,53,0.3);
+    --sd-soft: rgba(255,107,53,0.08);
+
+    --smp: #3B82F6;
+    --smp-glow: rgba(59,130,246,0.3);
+    --smp-soft: rgba(59,130,246,0.08);
+
+    --sma: #A855F7;
+    --sma-glow: rgba(168,85,247,0.3);
+    --sma-soft: rgba(168,85,247,0.08);
+
+    --py: #22C55E;
+    --py-glow: rgba(34,197,94,0.25);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    background: var(--ink);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--white);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s, height 0.3s, border-color 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring.hover {
+    width: 56px; height: 56px;
+    border-color: rgba(255,255,255,0.6);
+  }
+
+  /* CANVAS BG */
+  #bg-canvas {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 256px;
+    opacity: 0.4;
+  }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(13,13,20,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-mark {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--sd), var(--smp));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .nav-logo-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.5px;
+  }
+  .nav-logo-text span { color: white; }
+  .nav-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--py);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+  .eyebrow-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .hero-title .line1 { display: block; color: white; }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--sd) 0%, var(--smp) 40%, var(--sma) 70%, var(--py) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    animation: gradShift 4s ease infinite, fadeUp 0.8s 0.4s ease forwards;
+    opacity: 0;
+  }
+  @keyframes gradShift {
+    0%,100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .hero-desc {
+    max-width: 580px;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--fog);
+    line-height: 1.75;
+    margin: 0 auto 56px;
+    font-weight: 400;
+    opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+  }
+  .hero-desc strong { color: white; font-weight: 700; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SCROLL CUE */
+  .scroll-cue {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 1s 1.2s ease forwards;
+  }
+  .scroll-cue span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    color: rgba(255,255,255,0.25); text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollAnim 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollAnim {
+    0%,100% { transform: scaleY(1); transform-origin: top; }
+    50% { transform: scaleY(0.4); transform-origin: top; }
+  }
+
+  /* ========== INTRO SECTION ========== */
+  .intro {
+    position: relative; z-index: 2;
+    padding: 0 24px 100px;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .intro-cell {
+    background: var(--ink2);
+    padding: 32px;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .intro-cell:hover { background: var(--ink3); }
+  .intro-cell:nth-child(1) { border-right: 1px solid rgba(255,255,255,0.07); border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .intro-cell:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .intro-cell:nth-child(3) { border-right: 1px solid rgba(255,255,255,0.07); }
+  .intro-cell-icon {
+    font-size: 1.8rem; margin-bottom: 14px;
+    display: block;
+  }
+  .intro-cell h3 {
+    font-size: 1rem; font-weight: 700; margin-bottom: 8px;
+    color: white;
+  }
+  .intro-cell p {
+    font-size: 0.85rem; color: var(--fog); line-height: 1.65;
+  }
+
+  .intro-quote {
+    background: var(--ink2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid var(--py);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+  }
+  .intro-quote p {
+    font-size: 1.05rem; color: rgba(255,255,255,0.75);
+    line-height: 1.75; font-style: italic;
+  }
+  .intro-quote cite {
+    display: block; margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--py);
+    font-style: normal; letter-spacing: 1px;
+  }
+
+  /* ========== PATH VISUAL ========== */
+  .path-section {
+    position: relative; z-index: 2;
+    padding: 0 24px 80px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 3px;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::before, .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .path-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-bottom: 80px; flex-wrap: wrap;
+  }
+  .path-node {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+  }
+  .path-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 2px solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .path-circle:hover { transform: scale(1.15); }
+  .path-circle.sd { border-color: var(--sd); background: var(--sd-soft); box-shadow: 0 0 20px var(--sd-glow); }
+  .path-circle.smp { border-color: var(--smp); background: var(--smp-soft); box-shadow: 0 0 20px var(--smp-glow); }
+  .path-circle.sma { border-color: var(--sma); background: var(--sma-soft); box-shadow: 0 0 20px var(--sma-glow); }
+  .path-circle.py { border-color: var(--py); background: rgba(34,197,94,0.08); box-shadow: 0 0 20px var(--py-glow); }
+  .path-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.35);
+  }
+  .path-arrow {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    position: relative; margin: 0 4px; margin-bottom: 26px;
+  }
+  .path-arrow::after {
+    content: '';
+    position: absolute; right: -4px; top: -4px;
+    border: 4px solid transparent;
+    border-left: 6px solid rgba(255,255,255,0.15);
+  }
+
+  /* ========== LEVEL CARDS ========== */
+  .levels {
+    position: relative; z-index: 2;
+    padding: 0 24px 120px;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  .levels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .level-card {
+    position: relative;
+    background: var(--ink2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 36px 28px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+  .level-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .level-card.sd::before { background: radial-gradient(ellipse at 30% 0%, var(--sd-soft), transparent 65%); }
+  .level-card.smp::before { background: radial-gradient(ellipse at 30% 0%, var(--smp-soft), transparent 65%); }
+  .level-card.sma::before { background: radial-gradient(ellipse at 30% 0%, var(--sma-soft), transparent 65%); }
+
+  .level-card:hover { transform: translateY(-8px) scale(1.01); }
+  .level-card:hover::before { opacity: 1; }
+  .level-card.sd:hover { border-color: rgba(255,107,53,0.4); box-shadow: 0 20px 60px var(--sd-glow); }
+  .level-card.smp:hover { border-color: rgba(59,130,246,0.4); box-shadow: 0 20px 60px var(--smp-glow); }
+  .level-card.sma:hover { border-color: rgba(168,85,247,0.4); box-shadow: 0 20px 60px var(--sma-glow); }
+
+  /* top accent line */
+  .card-accent {
+    position: absolute; top: 0; left: 24px; right: 24px;
+    height: 2px; border-radius: 0 0 2px 2px;
+    transition: left 0.3s, right 0.3s;
+  }
+  .level-card:hover .card-accent { left: 0; right: 0; }
+  .sd .card-accent { background: linear-gradient(90deg, transparent, var(--sd), transparent); }
+  .smp .card-accent { background: linear-gradient(90deg, transparent, var(--smp), transparent); }
+  .sma .card-accent { background: linear-gradient(90deg, transparent, var(--sma), transparent); }
+
+  .card-level-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 4px 12px; border-radius: 100px;
+    border: 1px solid;
+  }
+  .sd .card-level-tag { color: var(--sd); border-color: rgba(255,107,53,0.3); background: var(--sd-soft); }
+  .smp .card-level-tag { color: var(--smp); border-color: rgba(59,130,246,0.3); background: var(--smp-soft); }
+  .sma .card-level-tag { color: var(--sma); border-color: rgba(168,85,247,0.3); background: var(--sma-soft); }
+
+  .card-icon {
+    font-size: 2.2rem; margin-bottom: 16px; display: block;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  }
+  .card-title {
+    font-size: 1.35rem; font-weight: 800;
+    line-height: 1.15; margin-bottom: 6px; letter-spacing: -0.02em;
+  }
+  .card-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--mist);
+    letter-spacing: 0.5px; margin-bottom: 18px;
+  }
+  .card-desc {
+    font-size: 0.84rem; color: var(--fog);
+    line-height: 1.65; margin-bottom: 24px;
+  }
+
+  .card-modules {
+    display: flex; flex-direction: column; gap: 5px;
+    margin-bottom: 28px;
+  }
+  .card-module-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; color: var(--mist);
+    line-height: 1.4;
+  }
+  .card-module-dot {
+    width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  }
+  .sd .card-module-dot { background: var(--sd); }
+  .smp .card-module-dot { background: var(--smp); }
+  .sma .card-module-dot { background: var(--sma); }
+
+  .card-stats {
+    display: flex; gap: 12px; margin-bottom: 28px;
+  }
+  .card-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .cs-label { font-family:'DM Mono',monospace; font-size:9px; color:var(--mist); letter-spacing:1px; margin-bottom:3px; }
+  .cs-val { font-size:0.9rem; font-weight:800; }
+  .sd .cs-val { color: var(--sd); }
+  .smp .cs-val { color: var(--smp); }
+  .sma .cs-val { color: var(--sma); }
+
+  .card-cta {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .card-cta-text {
+    font-size: 0.82rem; font-weight: 700;
+    transition: color 0.2s;
+  }
+  .sd .card-cta-text { color: rgba(255,107,53,0.7); }
+  .smp .card-cta-text { color: rgba(59,130,246,0.7); }
+  .sma .card-cta-text { color: rgba(168,85,247,0.7); }
+  .level-card:hover .card-cta-text { color: white; }
+
+  .card-arrow {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .level-card:hover .card-arrow { transform: translateX(4px); background: rgba(255,255,255,0.08); }
+  .sd:hover .card-arrow { border-color: var(--sd); }
+  .smp:hover .card-arrow { border-color: var(--smp); }
+  .sma:hover .card-arrow { border-color: var(--sma); }
+
+  /* ========== STATS BAR ========== */
+  .statsbar {
+    position: relative; z-index: 2;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 0 24px;
+    display: flex; justify-content: center;
+    margin-bottom: 0;
+    background: var(--ink2);
+  }
+  .statsbar-inner {
+    max-width: 900px; width: 100%;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    divide-color: rgba(255,255,255,0.05);
+  }
+  .stat-item {
+    padding: 28px 24px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-size: 2.2rem; font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, white, rgba(255,255,255,0.5));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--mist);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    position: relative; z-index: 2;
+    padding: 48px 48px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-left p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: rgba(255,255,255,0.2);
+    letter-spacing: 0.5px; line-height: 1.6;
+  }
+  .footer-path {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .fp-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .fp-dot.sd { background: var(--sd); }
+  .fp-dot.smp { background: var(--smp); }
+  .fp-dot.sma { background: var(--sma); }
+  .fp-dot.py { background: var(--py); }
+  .fp-sep { color: rgba(255,255,255,0.15); font-size: 12px; }
+
+  /* ENTRANCE ANIMATIONS */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .anim-delay-1 { transition-delay: 0.1s; }
+  .anim-delay-2 { transition-delay: 0.2s; }
+  .anim-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .levels-grid { grid-template-columns: 1fr; }
+    .intro-grid { grid-template-columns: 1fr; }
+    .statsbar-inner { grid-template-columns: 1fr 1fr; }
+    .stat-item:nth-child(2) { border-right: none; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+    .path-arrow { width: 32px; }
+  }
+  @media (max-width: 480px) {
+    .statsbar-inner { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ANIMATED BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">🧩</div>
+    <div class="nav-logo-text"><span>Scratch</span> → Python</div>
+  </div>
+  <div class="nav-pill">KURIKULUM PEMROGRAMAN</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <div class="eyebrow-dot"></div>
+    <span class="eyebrow-text">Kurikulum Pemrograman · SD → SMP → SMA → Python</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="line1">Belajar Coding</span>
+    <span class="line2">Dari Nol ke Python</span>
+  </h1>
+
+  <p class="hero-desc">
+    Program belajar pemrograman terstruktur yang membawa siswa dari 
+    <strong>blok visual Scratch</strong> menuju <strong>kode Python sesungguhnya</strong> — 
+    melalui tiga jenjang yang saling terhubung, dibangun di atas logika, bukan hafalan.
+  </p>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="statsbar">
+  <div class="statsbar-inner">
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-desc">Jenjang Belajar</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24</div>
+      <div class="stat-desc">Total Modul</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">72</div>
+      <div class="stat-desc">Pertemuan</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1</div>
+      <div class="stat-desc">Tujuan: Python</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="section-label">Tentang Kurikulum Ini</div>
+
+  <div class="intro-grid anim-item">
+    <div class="intro-cell">
+      <span class="intro-cell-icon">🧠</span>
+      <h3>Berpikir Dulu, Koding Kemudian</h3>
+      <p>Setiap modul dimulai dari memahami masalah dan merancang solusi secara logis — baru kemudian dituangkan ke dalam blok Scratch. Kebiasaan ini langsung terbawa ke Python.</p>
+    </div>
+    <div class="intro-cell">
+      <span class="intro-cell-icon">🔗</span>
+      <h3>Setiap Level Terhubung</h3>
+      <p>Konsep di SD menjadi fondasi SMP, konsep SMP diperdalam di SMA. Tidak ada lompatan tiba-tiba — setiap langkah adalah kelanjutan alami dari yang sebelumnya.</p>
+    </div>
+    <div class="intro-cell">
+      <span class="intro-cell-icon">🎮</span>
+      <h3>Belajar Lewat Membuat</h3>
+      <p>Setiap modul berakhir dengan proyek nyata yang bisa dimainkan atau digunakan. Siswa tidak hanya belajar sintaks — mereka menciptakan sesuatu yang bekerja.</p>
+    </div>
+    <div class="intro-cell">
+      <span class="intro-cell-icon">🐍</span>
+      <h3>Python Adalah Tujuan</h3>
+      <p>Dari modul pertama, setiap konsep dirancang agar paralel dengan Python. Saat transisi tiba, siswa hanya perlu belajar sintaks baru — logikanya sudah ada.</p>
+    </div>
+  </div>
+
+  <div class="intro-quote anim-item">
+    <p>"Sebelum anak bisa berlari, ia harus belajar berjalan. Scratch adalah cara berjalan dalam pemrograman — sebuah lingkungan aman di mana kesalahan tidak menakutkan, dan kreasi tidak terbatas."</p>
+    <cite>— Filosofi Kurikulum Ini</cite>
+  </div>
+</section>
+
+<!-- PATH -->
+<section class="path-section">
+  <div class="section-label">Alur Belajar</div>
+  <div class="path-flow anim-item">
+    <div class="path-node">
+      <div class="path-circle sd">🎮</div>
+      <span class="path-label">SD</span>
+    </div>
+    <div class="path-arrow"></div>
+    <div class="path-node">
+      <div class="path-circle smp">🔧</div>
+      <span class="path-label">SMP</span>
+    </div>
+    <div class="path-arrow"></div>
+    <div class="path-node">
+      <div class="path-circle sma">⚙️</div>
+      <span class="path-label">SMA</span>
+    </div>
+    <div class="path-arrow"></div>
+    <div class="path-node">
+      <div class="path-circle py">🐍</div>
+      <span class="path-label">Python</span>
+    </div>
+  </div>
+</section>
+
+<!-- LEVEL CARDS -->
+<section class="levels">
+  <div class="section-label">Pilih Level</div>
+
+  <div class="levels-grid">
+
+    <!-- SD -->
+    <a href="scratch-kurikulum-sd.html" class="level-card sd anim-item anim-delay-1">
+      <div class="card-accent"></div>
+      <div class="card-level-tag">
+        <span>●</span> LEVEL 1
+      </div>
+      <span class="card-icon">🎮</span>
+      <div class="card-title">Scratch SD</div>
+      <div class="card-subtitle">KELAS 4 – 6 · EKSPLORASI</div>
+      <p class="card-desc">
+        Fondasi berpikir komputasional melalui animasi, cerita, dan game sederhana. Tidak perlu pengalaman sebelumnya.
+      </p>
+      <div class="card-modules">
+        <div class="card-module-item"><div class="card-module-dot"></div>Antarmuka & Sprite</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Gerak, Suara & Efek Visual</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Kontrol Keyboard & Mouse</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Kondisi, Loop & Variabel</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Proyek: Game Tangkap Benda</div>
+      </div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-label">MODUL</div>
+          <div class="cs-val">8</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PERTEMUAN</div>
+          <div class="cs-val">24×</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PRASYARAT</div>
+          <div class="cs-val">–</div>
+        </div>
+      </div>
+      <div class="card-cta">
+        <span class="card-cta-text">Buka Kurikulum SD</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </a>
+
+    <!-- SMP -->
+    <a href="scratch-kurikulum-smp.html" class="level-card smp anim-item anim-delay-2">
+      <div class="card-accent"></div>
+      <div class="card-level-tag">
+        <span>●</span> LEVEL 2
+      </div>
+      <span class="card-icon">🔧</span>
+      <div class="card-title">Scratch SMP</div>
+      <div class="card-subtitle">KELAS 7 – 9 · LOGIKA & STRUKTUR</div>
+      <p class="card-desc">
+        Membangun logika terstruktur dengan kondisi kompleks, fungsi, list, dan event-driven programming.
+      </p>
+      <div class="card-modules">
+        <div class="card-module-item"><div class="card-module-dot"></div>Debugging & Kebiasaan Baik</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>If-Else, AND/OR, Nested If</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>List / Array & Input User</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Custom Blok (Fungsi)</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Proyek: Platform Game 2D</div>
+      </div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-label">MODUL</div>
+          <div class="cs-val">8</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PERTEMUAN</div>
+          <div class="cs-val">24×</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PRASYARAT</div>
+          <div class="cs-val">SD</div>
+        </div>
+      </div>
+      <div class="card-cta">
+        <span class="card-cta-text">Buka Kurikulum SMP</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </a>
+
+    <!-- SMA -->
+    <a href="scratch-kurikulum-sma.html" class="level-card sma anim-item anim-delay-3">
+      <div class="card-accent"></div>
+      <div class="card-level-tag">
+        <span>●</span> LEVEL 3
+      </div>
+      <span class="card-icon">⚙️</span>
+      <div class="card-title">Scratch SMA</div>
+      <div class="card-subtitle">KELAS 10 – 12 · ALGORITMA</div>
+      <p class="card-desc">
+        Algoritma, rekursi, simulasi, OOP konseptual, dan jembatan penuh menuju sintaks Python yang sesungguhnya.
+      </p>
+      <div class="card-modules">
+        <div class="card-module-item"><div class="card-module-dot"></div>Algoritma & Pseudocode</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Sorting, Searching & Rekursi</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Simulasi Fisika & Agen</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>OOP: Sprite sebagai Object</div>
+        <div class="card-module-item"><div class="card-module-dot"></div>Jembatan Scratch → Python</div>
+      </div>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-label">MODUL</div>
+          <div class="cs-val">8</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PERTEMUAN</div>
+          <div class="cs-val">24×</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-label">PRASYARAT</div>
+          <div class="cs-val">SMP</div>
+        </div>
+      </div>
+      <div class="card-cta">
+        <span class="card-cta-text">Buka Kurikulum SMA</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <p>Kurikulum Scratch → Python<br>SD · SMP · SMA · 24 Modul · 72 Pertemuan</p>
+  </div>
+  <div class="footer-path">
+    <div class="fp-dot sd"></div>
+    <span class="fp-sep">—</span>
+    <div class="fp-dot smp"></div>
+    <span class="fp-sep">—</span>
+    <div class="fp-dot sma"></div>
+    <span class="fp-sep">—</span>
+    <div class="fp-dot py"></div>
+  </div>
+</footer>
+
+<script>
+  // ===== CUSTOM CURSOR =====
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+  });
+
+  (function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animRing);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+
+  // ===== CANVAS BACKGROUND =====
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['#FF6B35', '#3B82F6', '#A855F7', '#22C55E'];
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.5 + 0.3;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.alpha = Math.random() * 0.4 + 0.05;
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color + Math.floor(this.alpha * 255).toString(16).padStart(2, '0');
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  // Draw subtle grid
+  function drawGrid() {
+    ctx.strokeStyle = 'rgba(255,255,255,0.015)';
+    ctx.lineWidth = 0.5;
+    const sz = 60;
+    for (let x = 0; x < W; x += sz) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += sz) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+  }
+
+  // Draw soft glows
+  let glowAngle = 0;
+  function drawGlows() {
+    glowAngle += 0.003;
+    const glows = [
+      { x: W * 0.2, y: H * 0.3, r: 300, color: '#FF6B35', a: 0.04 + Math.sin(glowAngle) * 0.01 },
+      { x: W * 0.8, y: H * 0.6, r: 280, color: '#3B82F6', a: 0.04 + Math.sin(glowAngle + 1) * 0.01 },
+      { x: W * 0.5, y: H * 0.8, r: 250, color: '#A855F7', a: 0.03 + Math.sin(glowAngle + 2) * 0.01 },
+    ];
+    glows.forEach(g => {
+      const grad = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r);
+      grad.addColorStop(0, g.color + Math.floor(g.a * 255).toString(16).padStart(2,'0'));
+      grad.addColorStop(1, g.color + '00');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  (function loop() {
+    ctx.clearRect(0, 0, W, H);
+    drawGrid();
+    drawGlows();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  })();
+
+  // ===== INTERSECTION OBSERVER =====
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.anim-item').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
