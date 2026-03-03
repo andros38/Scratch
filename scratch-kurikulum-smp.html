@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurikulum Scratch SMP — Level 2</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #3B82F6;
+    --primary-dark: #1D4ED8;
+    --primary-deeper: #1E3A8A;
+    --primary-light: #EFF6FF;
+    --primary-mid: #BFDBFE;
+    --accent: #06B6D4;
+    --accent2: #0EA5E9;
+    --dark: #0C1829;
+    --dark2: #0F2342;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --bg: #F0F6FF;
+    --white: #FFFFFF;
+    --green: #10B981;
+    --green-light: #ECFDF5;
+    --yellow: #F59E0B;
+    --yellow-light: #FFFBEB;
+    --red: #EF4444;
+    --code-bg: #0C1829;
+    --code-text: #CBD5E1;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ===== COVER ===== */
+  .cover {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 60px 40px;
+    position: relative; overflow: hidden;
+  }
+  .cover-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 25%, rgba(59,130,246,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 75%, rgba(6,182,212,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.05) 0%, transparent 70%);
+  }
+  .cover-circuit {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image:
+      linear-gradient(var(--primary) 1px, transparent 1px),
+      linear-gradient(90deg, var(--primary) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 720px; }
+
+  .level-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.3);
+    padding: 8px 20px; border-radius: 100px; margin-bottom: 32px;
+  }
+  .level-pill .pill-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); animation: blink 1.5s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .level-pill span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 2.5px; color: #93C5FD;
+  }
+
+  .cover h1 {
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 900; color: white; line-height: 1.05; margin-bottom: 10px;
+  }
+  .cover h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #60A5FA 0%, #06B6D4 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cover-sub {
+    font-size: 1.1rem; color: #64748B;
+    margin: 16px auto 40px; max-width: 520px; line-height: 1.75;
+  }
+  .cover-stats {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .cover-stat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 14px 22px;
+  }
+  .cover-stat .cs-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: #475569; letter-spacing: 1.5px; margin-bottom: 4px;
+  }
+  .cover-stat .cs-val { color: white; font-weight: 800; font-size: 1.05rem; }
+
+  .cover-prev {
+    position: absolute; bottom: 36px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 8px; align-items: center;
+  }
+  .prev-badge {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+  }
+  .prev-badge.done { color: #34D399; border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
+  .prev-badge.active { color: #60A5FA; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
+  .prev-badge.next { color: #475569; }
+
+  /* ===== DOC BODY ===== */
+  .doc { max-width: 880px; margin: 0 auto; padding: 52px 32px 80px; }
+
+  /* SECTION DIVIDER */
+  .divider {
+    display: flex; align-items: center; gap: 14px;
+    margin: 56px 0 28px;
+  }
+  .divider-line { flex: 1; height: 1.5px; background: linear-gradient(90deg, var(--primary-mid), transparent); }
+  .divider-line.rev { background: linear-gradient(90deg, transparent, var(--primary-mid)); }
+  .divider-chip {
+    background: var(--primary); color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    padding: 5px 16px; border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  /* OVERVIEW */
+  .overview-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 28px; margin-bottom: 36px;
+    box-shadow: 0 2px 16px rgba(59,130,246,0.06);
+  }
+  .overview-card h3 {
+    font-size: 1rem; font-weight: 800; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toc-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 8px; margin-bottom: 4px;
+    transition: background 0.15s;
+  }
+  .toc-row:hover { background: var(--primary-light); }
+  .toc-modul {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--primary-dark); min-width: 68px; font-weight: 700;
+  }
+  .toc-name { font-size: 0.87rem; font-weight: 700; flex: 1; }
+  .toc-dot { flex: 1; border-bottom: 1px dotted var(--border); }
+  .toc-meet {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+  }
+
+  .ov-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-bottom: 28px; }
+  .ov-table th {
+    background: var(--dark); color: #94A3B8;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 10px 14px; text-align: left;
+  }
+  .ov-table th:first-child { border-radius: 8px 0 0 0; }
+  .ov-table th:last-child { border-radius: 0 8px 0 0; }
+  .ov-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .ov-table tr:hover td { background: var(--primary-light); }
+  .blok-tag {
+    display: inline-block; background: #F1F5F9;
+    border: 1px solid var(--border); border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    padding: 1px 7px; margin: 1px 2px; color: var(--primary-dark);
+  }
+
+  /* MODULE */
+  .module {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px; margin-bottom: 44px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.07);
+  }
+
+  .mod-header {
+    background: linear-gradient(135deg, var(--primary-deeper) 0%, var(--primary-dark) 50%, var(--accent2) 100%);
+    padding: 24px 28px;
+    display: flex; align-items: flex-start; gap: 16px;
+    position: relative; overflow: hidden;
+  }
+  .mod-header::after {
+    content: '';
+    position: absolute; top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .mod-num {
+    width: 46px; height: 46px; flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; font-weight: 700; color: white; margin-top: 2px;
+  }
+  .mod-header-text h2 {
+    color: white; font-size: 1.2rem; font-weight: 800;
+    line-height: 1.2; margin-bottom: 6px;
+  }
+  .mod-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mod-tag {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.85);
+    font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .mod-body { padding: 28px; }
+
+  /* OBJECTIVE */
+  .obj-box {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px; margin-bottom: 22px;
+  }
+  .obj-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--primary-dark); letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .obj-box ul { padding-left: 16px; }
+  .obj-box li { font-size: 0.87rem; margin-bottom: 3px; }
+
+  /* INFO GRID */
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
+  .info-card {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 11px 14px;
+  }
+  .ic-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .ic-val { font-weight: 800; font-size: 0.87rem; }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-size: 9px; font-weight: 800; letter-spacing: 2px;
+    color: var(--primary-dark); font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sec-title::after { content: ''; flex: 1; height: 1px; background: var(--primary-mid); }
+
+  /* MATERI TABLE */
+  .mat-table { width: 100%; border-collapse: collapse; margin-bottom: 22px; font-size: 0.84rem; }
+  .mat-table th {
+    background: var(--primary-light); color: var(--primary-dark);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--primary-mid);
+  }
+  .mat-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mat-table tr:last-child td { border-bottom: none; }
+  .mat-table tr:hover td { background: #F8FBFF; }
+  .p-badge {
+    background: var(--primary-mid); color: var(--primary-dark);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 5px; white-space: nowrap;
+  }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--bg); border-radius: 10px;
+    padding: 12px 14px; border: 1px solid var(--border);
+  }
+  .step-n {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: var(--primary); color: white; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 12px; margin-top: 1px;
+  }
+  .step-c { flex: 1; }
+  .step-t { font-weight: 800; font-size: 0.87rem; margin-bottom: 3px; }
+  .step-d { font-size: 0.81rem; color: var(--muted); line-height: 1.5; }
+  .step-dur {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); white-space: nowrap; margin-top: 2px;
+  }
+
+  /* CODE */
+  .code-wrap { margin-bottom: 22px; border-radius: 12px; overflow: hidden; }
+  .code-top {
+    background: #162032; padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r { background: #FF5F57; }
+  .dot.y { background: #FFBD2E; }
+  .dot.g { background: #28C840; }
+  .code-file {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: #3B82F6; margin-left: 6px;
+  }
+  .code-lang {
+    margin-left: auto; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: #334155; letter-spacing: 1px;
+  }
+  .code-body {
+    background: var(--code-bg); padding: 20px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+    line-height: 1.75; color: var(--code-text);
+    overflow-x: auto;
+  }
+  .cm { color: #475569; font-style: italic; }
+  .ev { color: #FCD34D; font-weight: 700; }
+  .ct { color: #60A5FA; font-weight: 700; }
+  .mo { color: #34D399; }
+  .lk { color: #C084FC; }
+  .sn { color: #86EFAC; }
+  .vr { color: #FB923C; font-weight: 600; }
+  .op { color: #22D3EE; }
+  .sd { color: #F472B6; }
+  .i1 { padding-left: 24px; display: block; }
+  .i2 { padding-left: 48px; display: block; }
+  .i3 { padding-left: 72px; display: block; }
+
+  /* UJI COBA */
+  .uji {
+    background: var(--green-light);
+    border: 1.5px solid #6EE7B7; border-radius: 12px;
+    padding: 20px; margin-bottom: 22px;
+  }
+  .uji-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .uji-ico {
+    width: 36px; height: 36px; background: var(--green);
+    border-radius: 9px; display: flex; align-items: center;
+    justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .uji-title { font-weight: 900; font-size: 0.93rem; color: #065F46; }
+  .uji-sub { font-size: 9px; color: #34D399; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+  .checks { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .checks li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.84rem; color: #065F46; line-height: 1.45;
+  }
+  .check-box {
+    width: 18px; height: 18px; border: 2px solid #34D399;
+    border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* TANTANGAN */
+  .bonus {
+    background: var(--yellow-light);
+    border: 1.5px solid #FDE68A; border-radius: 12px;
+    padding: 18px; margin-bottom: 22px;
+  }
+  .bonus-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bonus-ico {
+    width: 32px; height: 32px; background: var(--yellow);
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 14px;
+  }
+  .bonus-title { font-weight: 900; font-size: 0.9rem; color: #78350F; }
+  .bonus ul { padding-left: 16px; }
+  .bonus li { font-size: 0.82rem; color: #78350F; margin-bottom: 5px; }
+
+  /* CONCEPT BOX — khusus SMP untuk koneksi ke Python */
+  .concept-bridge {
+    background: linear-gradient(135deg, #0C1829 0%, #0F2342 100%);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 12px; padding: 18px; margin-bottom: 22px;
+  }
+  .cb-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cb-ico {
+    width: 32px; height: 32px; background: rgba(59,130,246,0.3);
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 14px;
+  }
+  .cb-title { color: #93C5FD; font-weight: 800; font-size: 0.88rem; }
+  .cb-sub { color: #3B82F6; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; }
+  .cb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cb-item { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 10px 12px; }
+  .cb-item .cbi-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #3B82F6; margin-bottom: 3px; letter-spacing: 1px; }
+  .cb-item .cbi-val { color: #CBD5E1; font-size: 0.81rem; font-weight: 600; line-height: 1.4; }
+
+  /* PROJECT BOX */
+  .proj-box {
+    background: linear-gradient(135deg, #0C1829 0%, #162032 100%);
+    border-radius: 14px; padding: 24px; margin-bottom: 22px;
+  }
+  .proj-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .proj-ico {
+    width: 44px; height: 44px; background: var(--primary);
+    border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 20px;
+  }
+  .proj-title { color: white; font-weight: 900; font-size: 1rem; }
+  .proj-sub { color: #3B82F6; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; }
+  .proj-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ps-item { background: rgba(255,255,255,0.06); border-radius: 9px; padding: 12px 14px; }
+  .ps-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #475569; letter-spacing: 1px; margin-bottom: 4px; }
+  .ps-val { color: #E2E8F0; font-size: 0.82rem; font-weight: 700; }
+
+  /* RUBRIK */
+  .rubrik { width: 100%; border-collapse: collapse; font-size: 0.81rem; margin-bottom: 14px; }
+  .rubrik th {
+    background: #0C1829; color: #64748B;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 10px 12px; text-align: left;
+  }
+  .rubrik td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .rubrik tr:last-child td { border-bottom: none; }
+  .s4 { display:inline-block; padding:2px 9px; border-radius:5px; font-weight:800; font-size:11px; background:#DCFCE7; color:#166534; }
+  .s3 { display:inline-block; padding:2px 9px; border-radius:5px; font-weight:800; font-size:11px; background:#DBEAFE; color:#1E40AF; }
+  .s2 { display:inline-block; padding:2px 9px; border-radius:5px; font-weight:800; font-size:11px; background:#FEF9C3; color:#713F12; }
+  .s1 { display:inline-block; padding:2px 9px; border-radius:5px; font-weight:800; font-size:11px; background:#FFE4E6; color:#9F1239; }
+
+  @media (max-width: 640px) {
+    .proj-spec, .cb-grid, .info-grid { grid-template-columns: 1fr; }
+    .cover-stats { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-circuit"></div>
+  <div class="cover-content">
+    <div class="level-pill">
+      <div class="pill-dot"></div>
+      <span>LEVEL 2 · SEKOLAH MENENGAH PERTAMA</span>
+    </div>
+    <h1>Kurikulum<br><em>Scratch</em> SMP</h1>
+    <p class="cover-sub">
+      Membangun logika terstruktur, kondisi kompleks, fungsi, dan list.<br>
+      Jembatan nyata dari pemrograman visual menuju Python.
+    </p>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="cs-label">TOTAL MODUL</div><div class="cs-val">8 Modul</div></div>
+      <div class="cover-stat"><div class="cs-label">TOTAL PERTEMUAN</div><div class="cs-val">~24 Pertemuan</div></div>
+      <div class="cover-stat"><div class="cs-label">JENJANG</div><div class="cs-val">Kelas 7–9 SMP</div></div>
+      <div class="cover-stat"><div class="cs-label">PRASYARAT</div><div class="cs-val">Kurikulum SD Level 1</div></div>
+    </div>
+  </div>
+  <div class="cover-prev">
+    <div class="prev-badge done">✓ SD — Level 1</div>
+    <div style="color:#334155; font-size:18px;">→</div>
+    <div class="prev-badge active">▶ SMP — Level 2</div>
+    <div style="color:#334155; font-size:18px;">→</div>
+    <div class="prev-badge next">SMA — Level 3</div>
+    <div style="color:#334155; font-size:18px;">→</div>
+    <div class="prev-badge next">🐍 Python</div>
+  </div>
+</div>
+
+<!-- DOC BODY -->
+<div class="doc">
+
+  <!-- OVERVIEW -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-chip">GAMBARAN UMUM</div>
+    <div class="divider-line rev"></div>
+  </div>
+
+  <div class="overview-card">
+    <h3>📋 Daftar Modul — SMP Level 2</h3>
+    <div class="toc-row"><span class="toc-modul">MODUL 01</span><span class="toc-name">Review & Pendalaman — Debugging & Kebiasaan Baik</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 02</span><span class="toc-name">Kondisi Kompleks — If-Else, AND/OR, Nested If</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 03</span><span class="toc-name">Loop Lanjutan — Repeat Until & Pola Geometri</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 04</span><span class="toc-name">Variabel Lanjutan, Input User & Operasi Matematika</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 05</span><span class="toc-name">List (Array Dasar) — Simpan & Kelola Kumpulan Data</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 06</span><span class="toc-name">Custom Blok (Fungsi & Prosedur)</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 07</span><span class="toc-name">Broadcasting — Komunikasi Antar Sprite</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+    <div class="toc-row"><span class="toc-modul">MODUL 08</span><span class="toc-name">Proyek Akhir SMP — Platform Game / Puzzle Game 2D</span><span class="toc-dot"></span><span class="toc-meet">3 pertemuan</span></div>
+  </div>
+
+  <table class="ov-table">
+    <thead>
+      <tr>
+        <th>MODUL</th><th>KONSEP UTAMA</th><th>BLOK SCRATCH</th><th>PARALEL PYTHON</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>Debugging, komentar kode</td><td><span class="blok-tag">say</span> <span class="blok-tag">think</span></td><td><code style="font-size:11px"># komentar</code></td></tr>
+      <tr><td><strong>02</strong></td><td>If-else, AND, OR, nested if</td><td><span class="blok-tag">if-else</span> <span class="blok-tag">and/or</span></td><td><code style="font-size:11px">if/elif/else</code></td></tr>
+      <tr><td><strong>03</strong></td><td>Loop kondisi, menggambar pola</td><td><span class="blok-tag">repeat until</span> <span class="blok-tag">pen</span></td><td><code style="font-size:11px">while</code></td></tr>
+      <tr><td><strong>04</strong></td><td>Input user, operasi aritmatika</td><td><span class="blok-tag">ask and wait</span> <span class="blok-tag">answer</span></td><td><code style="font-size:11px">input()</code></td></tr>
+      <tr><td><strong>05</strong></td><td>List, tambah/hapus/iterasi</td><td><span class="blok-tag">add to list</span> <span class="blok-tag">item of</span></td><td><code style="font-size:11px">list.append()</code></td></tr>
+      <tr><td><strong>06</strong></td><td>Custom blok, parameter</td><td><span class="blok-tag">define [blok]</span></td><td><code style="font-size:11px">def fungsi():</code></td></tr>
+      <tr><td><strong>07</strong></td><td>Broadcast, event messaging</td><td><span class="blok-tag">broadcast</span> <span class="blok-tag">when I receive</span></td><td><code style="font-size:11px">event handler</code></td></tr>
+      <tr><td><strong>08</strong></td><td>Integrasi semua konsep</td><td>Semua blok di atas</td><td>Mini project Python</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== MODUL 01 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 01</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">01</div>
+      <div class="mod-header-text">
+        <h2>Review & Pendalaman — Debugging & Kebiasaan Baik</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">🔍 DEBUGGING</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu membaca dan menganalisis kode Scratch yang sudah ada</li>
+          <li>Siswa mampu menemukan dan memperbaiki bug (kesalahan logika) dalam kode</li>
+          <li>Siswa membiasakan diri memberi komentar pada blok kode untuk dokumentasi</li>
+        </ul>
+      </div>
+      <div class="info-grid">
+        <div class="info-card"><div class="ic-label">KELAS</div><div class="ic-val">7–9 SMP</div></div>
+        <div class="info-card"><div class="ic-label">PRASYARAT</div><div class="ic-val">Selesai SD Level 1</div></div>
+        <div class="info-card"><div class="ic-label">FOKUS</div><div class="ic-val">Berpikir kritis & analitis</div></div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK / TOOLS</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Recap & Apa yang Berubah di SMP</strong><br><small style="color:#64748B">Review konsep SD, harapan level SMP</small></td><td><span class="blok-tag">say</span> <span class="blok-tag">think</span></td><td>Buat proyek recap: gabungkan 5 konsep SD dalam 1 proyek</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Membaca & Menganalisis Kode</strong><br><small style="color:#64748B">Reverse engineering: baca kode, tebak hasilnya</small></td><td>Script Area, Step mode</td><td>Diberikan kode acak → prediksi output → jalankan → bandingkan</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Debugging & Komentar</strong><br><small style="color:#64748B">Temukan bug logika, tambah komentar deskriptif</small></td><td><span class="blok-tag">// comment block</span></td><td>Perbaiki 3 proyek rusak yang disiapkan guru</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE BERMASALAH — TUGAS DEBUGGING</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">debug_challenge.scratch</span>
+          <span class="code-lang">KODE BERMASALAH — TEMUKAN 3 BUG</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- KODE BERMASALAH (siswa harus temukan & perbaiki) --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="vr">set [Skor] to 10</span>  <span class="cm">← BUG #1: seharusnya mulai dari 0</span></span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;touching [Koin]?&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="vr">change [Skor] by -1</span>  <span class="cm">← BUG #2: seharusnya +1, bukan -1</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Skor)</span> <span class="op">= 5</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "Kalah!" for 2 secs</span>  <span class="cm">← BUG #3: logika terbalik, skor 5 = menang</span></span>
+<span class="i3"><span class="ct">stop [all]</span></span>
+
+<span class="cm">-- KODE YANG BENAR (setelah diperbaiki) --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="vr">set [Skor] to 0</span>  <span class="cm">← ✓ mulai dari nol</span></span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;touching [Koin]?&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="vr">change [Skor] by 1</span>  <span class="cm">← ✓ tambah skor</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Skor)</span> <span class="op">= 5</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "🏆 Menang!" for 2 secs</span>  <span class="cm">← ✓ pesan benar</span></span>
+<span class="i3"><span class="ct">stop [all]</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 01</div><div class="uji-sub">VERIFIKASI SEBELUM LANJUT</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Siswa berhasil menemukan minimal 2 dari 3 bug tanpa petunjuk</li>
+          <li><div class="check-box"></div>Kode yang diperbaiki berjalan dengan output yang benar</li>
+          <li><div class="check-box"></div>Setiap blok kode memiliki setidaknya 1 komentar deskriptif</li>
+          <li><div class="check-box"></div>Siswa bisa menjelaskan <em>mengapa</em> kode lama salah dan kode baru benar</li>
+          <li><div class="check-box"></div>Siswa bisa membedakan: bug syntax vs bug logika</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul><li>Buat proyek bermasalah sendiri, lalu tukar dengan teman untuk di-debug</li><li>Gunakan mode "Step" di Scratch untuk menelusuri eksekusi blok satu per satu</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 02 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 02</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">02</div>
+      <div class="mod-header-text">
+        <h2>Kondisi Kompleks — If-Else, AND/OR, Nested If</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">🔀 LOGIKA LANJUTAN</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menggunakan blok if-else untuk dua jalur keputusan</li>
+          <li>Siswa memahami operator logika AND, OR, NOT dan cara menggabungkannya</li>
+          <li>Siswa mampu membuat kondisi bersarang (nested if) untuk keputusan bertingkat</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python</div><div class="cb-sub">KONEKSI SCRATCH → PYTHON</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">if &lt;kondisi&gt; then / else</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">if kondisi: ... else: ...</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">&lt;cond1&gt; and &lt;cond2&gt;</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">cond1 and cond2</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>If-Else: Dua Jalur Keputusan</strong><br><small style="color:#64748B">Jika YA → ini, jika TIDAK → itu</small></td><td><span class="blok-tag">if...then...else</span></td><td>Lampu lalu lintas: hijau = jalan, merah = berhenti</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Operator AND & OR</strong><br><small style="color:#64748B">Gabung dua kondisi sekaligus</small></td><td><span class="blok-tag">&lt;&gt; and &lt;&gt;</span> <span class="blok-tag">&lt;&gt; or &lt;&gt;</span></td><td>Kuis: benar jika jawaban tepat DAN waktu belum habis</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Nested If: Kondisi Bertingkat</strong><br><small style="color:#64748B">If di dalam if untuk keputusan berlapis</small></td><td><span class="blok-tag">if</span> bersarang</td><td>Game RPG mini: cek level + item + HP untuk aksi serang</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — KUIS INTERAKTIF DENGAN IF-ELSE & AND</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">kuis_interaktif.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- KUIS DENGAN BATAS WAKTU + JAWABAN BENAR --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="vr">set [Waktu] to 10</span></span>
+<span class="i1"><span class="vr">set [Jawaban_Benar] to "Paris"</span></span>
+<span class="i1"><span class="sd">ask "Apa ibukota Perancis? (10 detik!)" and wait</span></span>
+<span class="i1"><span class="vr">set [Jawaban_User] to (answer)</span></span>
+
+<span class="cm">-- CEK: jawaban benar DAN masih dalam waktu --</span>
+<span class="i1"><span class="ct">if</span> <span class="op">&lt;&lt;<span class="vr">(Jawaban_User)</span> = <span class="vr">(Jawaban_Benar)</span>&gt; <strong>and</strong> &lt;<span class="vr">(Waktu)</span> <span class="op">&gt; 0</span>&gt;&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="sd">play sound [Correct]</span></span>
+<span class="i2"><span class="lk">say "✅ Benar! Kamu cepat! +10 poin" for 2 secs</span></span>
+<span class="i2"><span class="vr">change [Skor] by 10</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="cm">-- Nested if: bedakan salah vs terlambat --</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Waktu)</span> <span class="op">= 0</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "⏰ Waktu habis! Jawaban: Paris" for 2 secs</span></span>
+<span class="i2"><span class="ct">else</span></span>
+<span class="i3"><span class="lk">say "❌ Salah! Coba lagi ya..." for 2 secs</span></span>
+        </div>
+      </div>
+      <div class="sec-title">CONTOH KODE — NESTED IF: SISTEM LEVEL RPG</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">rpg_level_check.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Nested If</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- Cek kondisi berlapis sebelum aksi --</span>
+<span class="ev">when [Space] key pressed</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(HP)</span> <span class="op">&gt; 0</span>&gt;</span> <span class="ct">then</span>  <span class="cm">← level 1: cek masih hidup</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Level)</span> <span class="op">≥ 3</span>&gt;</span> <span class="ct">then</span>  <span class="cm">← level 2: cek level cukup</span></span>
+<span class="i3"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Punya_Pedang)</span> <span class="op">= true</span>&gt;</span> <span class="ct">then</span>  <span class="cm">← level 3: cek punya item</span></span>
+<span style="padding-left:96px"><span class="sd">play sound [Attack]</span></span>
+<span style="padding-left:96px"><span class="lk">say "⚔️ Serangan Pedang Kilat!" for 2 secs</span></span>
+<span style="padding-left:96px"><span class="vr">change [HP_Musuh] by -50</span></span>
+<span class="i3"><span class="ct">else</span></span>
+<span style="padding-left:96px"><span class="lk">say "Kamu tidak punya pedang!" for 1 secs</span></span>
+<span class="i2"><span class="ct">else</span></span>
+<span class="i3"><span class="lk">say "Level belum cukup! Butuh Level 3" for 1 secs</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="lk">say "💀 Game Over — HP habis!" for 2 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 02</div><div class="uji-sub">VERIFIKASI SEMUA JALUR KONDISI</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Jalur "jika YA" berjalan dengan output yang benar</li>
+          <li><div class="check-box"></div>Jalur "jika TIDAK" (else) juga berjalan dan outputnya berbeda</li>
+          <li><div class="check-box"></div>Kondisi AND: hanya benar jika KEDUA kondisi terpenuhi — diuji 4 kombinasi</li>
+          <li><div class="check-box"></div>Kondisi OR: benar jika SALAH SATU kondisi terpenuhi — diuji 4 kombinasi</li>
+          <li><div class="check-box"></div>Nested if: setiap level kondisi berjalan independen (uji tiap jalur satu per satu)</li>
+          <li><div class="check-box"></div>Tidak ada kondisi yang "deadlock" — semua kemungkinan input punya output</li>
+          <li><div class="check-box"></div>Siswa bisa menggambar flowchart dari kondisi yang mereka buat</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Implementasikan operator NOT: sprite bereaksi jika TIDAK menyentuh warna tertentu</li>
+          <li>Buat kalkulator BMI sederhana dengan if-else bertingkat (kurus/normal/gemuk)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 03 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 03</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">03</div>
+      <div class="mod-header-text">
+        <h2>Loop Lanjutan — Repeat Until & Pola Geometri</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">🔁 LOOP KONDISI</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menggunakan <code>repeat until</code> — loop yang berhenti saat kondisi tercapai</li>
+          <li>Siswa mampu membuat loop bersarang (nested loop) untuk pola dua dimensi</li>
+          <li>Siswa mampu menggunakan ekstensi Pen untuk menggambar pola geometri dengan kode</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python</div><div class="cb-sub">KONEKSI SCRATCH → PYTHON</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">repeat until &lt;kondisi&gt;</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">while not kondisi: ...</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">repeat 4 di dalam repeat 4</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">for i in range(4): for j in range(4):</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Repeat Until — Loop Kondisi</strong><br><small style="color:#64748B">Loop yang tahu kapan harus berhenti sendiri</small></td><td><span class="blok-tag">repeat until</span></td><td>Sprite berjalan SAMPAI menyentuh dinding</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Ekstensi Pen & Menggambar</strong><br><small style="color:#64748B">Pen down/up, set color, set size</small></td><td><span class="blok-tag">pen down</span> <span class="blok-tag">set pen color</span></td><td>Menggambar persegi, segitiga, dan lingkaran dengan kode</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Nested Loop + Pola Grid</strong><br><small style="color:#64748B">Loop dalam loop untuk pola 2D</small></td><td><span class="blok-tag">repeat</span> bersarang</td><td>Gambar pola: bintang berulang dalam grid, spiral</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — MENGGAMBAR POLIGON APAPUN</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">poligon_generator.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Pen Extension</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- Custom Blok: gambar poligon dengan N sisi --</span>
+<span class="cm">-- (Preview konsep custom blok sebelum Modul 06) --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="mo">go to x: 0 y: 0</span></span>
+<span class="i1">erase all</span>
+<span class="i1">set pen color to [biru]</span>
+<span class="i1">set pen size to 3</span>
+<span class="i1">pen down</span>
+
+<span class="cm">-- Gambar SEGITIGA: 3 sisi, belok 120° --</span>
+<span class="i1"><span class="ct">repeat 3</span></span>
+<span class="i2"><span class="mo">move 100 steps</span></span>
+<span class="i2"><span class="mo">turn 120 degrees</span></span>   <span class="cm">← 360 / 3 = 120</span>
+
+<span class="cm">-- Gambar SEGI-6: 6 sisi, belok 60° --</span>
+<span class="i1">pen up</span>
+<span class="i1"><span class="mo">go to x: -150 y: 0</span></span>
+<span class="i1">set pen color to [merah]</span>
+<span class="i1">pen down</span>
+<span class="i1"><span class="ct">repeat 6</span></span>
+<span class="i2"><span class="mo">move 60 steps</span></span>
+<span class="i2"><span class="mo">turn 60 degrees</span></span>   <span class="cm">← 360 / 6 = 60</span>
+        </div>
+      </div>
+      <div class="sec-title">CONTOH KODE — SPIRAL DENGAN REPEAT UNTIL</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">spiral.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Repeat Until</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- Spiral: panjang langkah bertambah tiap iterasi --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">erase all</span>
+<span class="i1"><span class="mo">go to x: 0 y: 0</span></span>
+<span class="i1"><span class="vr">set [Panjang] to 5</span></span>
+<span class="i1">set pen color to [cyan]</span>
+<span class="i1">pen down</span>
+
+<span class="i1"><span class="ct">repeat until</span> <span class="sn">&lt;<span class="vr">(Panjang)</span> <span class="op">&gt; 200</span>&gt;</span>  <span class="cm">← berhenti jika langkah > 200</span></span>
+<span class="i2"><span class="mo">move (Panjang) steps</span></span>
+<span class="i2"><span class="mo">turn 91 degrees</span></span>   <span class="cm">← 91° bukan 90° → spiral melebar</span>
+<span class="i2"><span class="vr">change [Panjang] by 1</span></span>
+<span class="i2">change pen color by 5</span>   <span class="cm">← warna berubah perlahan</span>
+
+<span class="i1">pen up</span>
+<span class="i1"><span class="lk">say "Spiral selesai! 🌀 Langkah akhir: " + Panjang for 2 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 03</div><div class="uji-sub">VERIFIKASI OUTPUT VISUAL & LOGIKA</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Persegi terbentuk sempurna (4 sisi sama panjang, sudut 90°)</li>
+          <li><div class="check-box"></div><code>repeat until</code> berhenti tepat saat kondisi terpenuhi, tidak lebih</li>
+          <li><div class="check-box"></div>Spiral melebar dari tengah ke luar secara konsisten</li>
+          <li><div class="check-box"></div>Rumus sudut tiap poligon benar: 360 ÷ jumlah sisi</li>
+          <li><div class="check-box"></div>Erase all berjalan di awal sehingga gambar lama terhapus saat restart</li>
+          <li><div class="check-box"></div>Siswa bisa menjelaskan: kapan pakai <code>repeat N</code> vs <code>repeat until</code>?</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Buat "poligon generator" — tanya input berapa sisi, gambar poligon yang sesuai</li>
+          <li>Gambar bintang 5 sudut menggunakan repeat 5 dan sudut 144°</li>
+          <li>Buat nested loop: gambar grid 5×5 titik menggunakan dua repeat bersarang</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 04 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 04</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">04</div>
+      <div class="mod-header-text">
+        <h2>Variabel Lanjutan, Input User & Operasi Matematika</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">📦 DATA & INPUT</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu mengambil input dari pengguna menggunakan blok <code>ask and wait</code></li>
+          <li>Siswa mampu menyimpan dan mengoperasikan data numerik dalam variabel</li>
+          <li>Siswa dapat membuat program interaktif yang responsif terhadap input pengguna</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python</div><div class="cb-sub">KONEKSI SCRATCH → PYTHON</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">ask "Nama kamu?" and wait → answer</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">nama = input("Nama kamu? ")</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">(10) + (Skor) × (2)</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">10 + skor * 2</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Ask & Answer — Input dari Pengguna</strong><br><small style="color:#64748B">Cara program "bertanya" kepada user</small></td><td><span class="blok-tag">ask...and wait</span> <span class="blok-tag">answer</span></td><td>Program "kenal diri" — tanya nama, umur, hobi</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Operasi Matematika Lanjutan</strong><br><small style="color:#64748B">+, -, ×, ÷, mod, round, sqrt</small></td><td><span class="blok-tag">( ) + ( )</span> <span class="blok-tag">mod</span> <span class="blok-tag">sqrt</span></td><td>Kalkulator sederhana: pilih operasi, masukkan 2 angka</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Validasi Input & Feedback</strong><br><small style="color:#64748B">Cek apakah input valid sebelum diproses</small></td><td><span class="blok-tag">if (answer) &gt; 0</span></td><td>Kalkulator dengan penanganan error (pembagian nol, input negatif)</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — KALKULATOR INTERAKTIF LENGKAP</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">kalkulator.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Input & Validasi</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- Kalkulator dengan validasi input --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="sd">ask "Masukkan angka pertama:" and wait</span></span>
+<span class="i1"><span class="vr">set [Angka1] to (answer)</span></span>
+
+<span class="i1"><span class="sd">ask "Masukkan angka kedua:" and wait</span></span>
+<span class="i1"><span class="vr">set [Angka2] to (answer)</span></span>
+
+<span class="i1"><span class="sd">ask "Pilih operasi (+, -, ×, ÷):" and wait</span></span>
+<span class="i1"><span class="vr">set [Operasi] to (answer)</span></span>
+
+<span class="cm">-- If-else bertingkat untuk tiap operasi --</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Operasi)</span> = "+"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [Hasil] to</span> <span class="op">((Angka1) + (Angka2))</span></span>
+<span class="i1"><span class="ct">else if</span> <span class="sn">&lt;<span class="vr">(Operasi)</span> = "-"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [Hasil] to</span> <span class="op">((Angka1) - (Angka2))</span></span>
+<span class="i1"><span class="ct">else if</span> <span class="sn">&lt;<span class="vr">(Operasi)</span> = "×"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [Hasil] to</span> <span class="op">((Angka1) × (Angka2))</span></span>
+<span class="i1"><span class="ct">else if</span> <span class="sn">&lt;<span class="vr">(Operasi)</span> = "÷"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="cm">-- Validasi: pembagi tidak boleh nol --</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Angka2)</span> <span class="op">= 0</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "⚠️ Error: tidak bisa bagi dengan nol!" for 2 secs</span></span>
+<span class="i3"><span class="ct">stop [this script]</span></span>
+<span class="i2"><span class="vr">set [Hasil] to</span> <span class="op">((Angka1) / (Angka2))</span></span>
+
+<span class="i1"><span class="lk">say (join (join (Angka1) (join " " (join (Operasi) " "))) (join (Angka2) (join " = " (Hasil)))) for 3 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 04</div><div class="uji-sub">UJI SEMUA JALUR TERMASUK EDGE CASES</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Penjumlahan: 5 + 3 = 8 ✓</li>
+          <li><div class="check-box"></div>Pengurangan: 10 - 4 = 6 ✓</li>
+          <li><div class="check-box"></div>Perkalian: 7 × 8 = 56 ✓</li>
+          <li><div class="check-box"></div>Pembagian: 15 ÷ 3 = 5 ✓</li>
+          <li><div class="check-box"></div>Edge case: pembagian dengan nol → pesan error, tidak crash</li>
+          <li><div class="check-box"></div>Input teks saat diminta angka → program memberi feedback yang tepat</li>
+          <li><div class="check-box"></div>Hasil tampil dengan format yang mudah dibaca (bukan hanya angka)</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Tambahkan operasi modulo (sisa bagi) dan pangkat ke kalkulator</li>
+          <li>Buat "tebak angka" — komputer pilih angka acak 1-100, user menebak dengan petunjuk "terlalu besar / terlalu kecil"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 05 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 05</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">05</div>
+      <div class="mod-header-text">
+        <h2>List (Array Dasar) — Kelola Kumpulan Data</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">📋 STRUKTUR DATA</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami konsep list sebagai satu wadah yang menyimpan banyak data</li>
+          <li>Siswa mampu menambah, menghapus, membaca, dan mengiterasi item dalam list</li>
+          <li>Siswa dapat menggunakan list untuk membangun fitur seperti daftar, inventory, atau kamus sederhana</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python</div><div class="cb-sub">KONEKSI SCRATCH → PYTHON</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">add "apel" to [Buah]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">buah.append("apel")</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">item 1 of [Buah]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">buah[0]  # index dari 0</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">length of [Buah]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">len(buah)</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Konsep List & Operasi Dasar</strong><br><small style="color:#64748B">Buat list, tambah, hapus, baca item</small></td><td><span class="blok-tag">add to list</span> <span class="blok-tag">delete of list</span> <span class="blok-tag">item of list</span></td><td>Daftar belanja interaktif: tambah/hapus barang</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Iterasi List — Baca Semua Item</strong><br><small style="color:#64748B">Loop dari item 1 sampai akhir list</small></td><td><span class="blok-tag">length of list</span> <span class="blok-tag">repeat until</span></td><td>Program tampilkan semua item list satu per satu</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Pencarian dalam List</strong><br><small style="color:#64748B">Cek apakah item ada di list (contains)</small></td><td><span class="blok-tag">[list] contains?</span></td><td>Sistem inventory game: cek apakah memiliki item tertentu</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — SISTEM INVENTORY GAME</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">inventory_system.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · List Operations</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- INISIALISASI: list kosong di awal game --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">delete all of [Inventory]</span>
+<span class="i1"><span class="lk">say "Inventorymu kosong. Jelajahi dunia! 🎒" for 2 secs</span></span>
+
+<span class="cm">-- Ambil item saat menyentuh --</span>
+<span class="ev">when [Pemain] touches [Pedang]</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">NOT &lt;[Inventory] contains [Pedang]?&gt;</span> <span class="ct">then</span>  <span class="cm">← hindari duplikat</span></span>
+<span class="i2">add [Pedang] to [Inventory]</span>
+<span class="i2"><span class="sd">play sound [Item Get]</span></span>
+<span class="i2"><span class="lk">say "Dapat Pedang! ⚔️" for 1 secs</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="lk">say "Sudah punya Pedang." for 1 secs</span></span>
+
+<span class="cm">-- Tampilkan semua inventory --</span>
+<span class="ev">when [I] key pressed</span>
+<span class="i1"><span class="vr">set [Index] to 1</span></span>
+<span class="i1"><span class="lk">say "=== INVENTORY ===" for 1 secs</span></span>
+<span class="i1"><span class="ct">repeat until</span> <span class="sn">&lt;<span class="vr">(Index)</span> <span class="op">&gt; (length of [Inventory])</span>&gt;</span></span>
+<span class="i2"><span class="lk">say (join (Index) (join ". " (item (Index) of [Inventory]))) for 1 secs</span></span>
+<span class="i2"><span class="vr">change [Index] by 1</span></span>
+
+<span class="cm">-- Gunakan item: cek dulu apakah punya --</span>
+<span class="ev">when [Space] key pressed</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;[Inventory] contains [Pedang]?&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="lk">say "⚔️ Menyerang dengan Pedang!" for 1 secs</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="lk">say "Tidak punya senjata. Cari dulu!" for 1 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 05</div><div class="uji-sub">VERIFIKASI OPERASI LIST LENGKAP</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>List kosong di awal (delete all berjalan saat flag diklik)</li>
+          <li><div class="check-box"></div>Add item: item benar-benar masuk ke list dan tampil di panel</li>
+          <li><div class="check-box"></div>Tidak ada duplikat: item yang sama tidak bisa masuk dua kali</li>
+          <li><div class="check-box"></div>Delete: item terhapus dari posisi yang benar</li>
+          <li><div class="check-box"></div>Iterasi: semua item berhasil ditampilkan satu per satu dengan index benar</li>
+          <li><div class="check-box"></div>Contains: cek keberadaan item akurat (true/false)</li>
+          <li><div class="check-box"></div>Siswa bisa menjelaskan: kapan pakai variabel vs list?</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Buat "kamus terjemahan" — list kata Indonesia dan list kata Inggris sejajar (index sama)</li>
+          <li>Implementasi sistem skor tertinggi (highscore): simpan 3 skor terbaik dalam list</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 06 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 06</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">06</div>
+      <div class="mod-header-text">
+        <h2>Custom Blok — Fungsi & Prosedur</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">⚙️ FUNGSI</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami prinsip DRY (Don't Repeat Yourself) — mengapa fungsi diperlukan</li>
+          <li>Siswa mampu membuat custom blok dengan dan tanpa parameter input</li>
+          <li>Siswa dapat memecah program kompleks menjadi fungsi-fungsi kecil yang dapat digunakan ulang</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python — KONSEP TERPENTING</div><div class="cb-sub">CUSTOM BLOK = def FUNCTION</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH — DEFINISI</div><div class="cbi-val">define [Lompat tinggi: (tinggi)]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON — DEFINISI</div><div class="cbi-val">def lompat(tinggi):</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH — PANGGILAN</div><div class="cbi-val">Lompat tinggi: 80</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON — PANGGILAN</div><div class="cbi-val">lompat(80)</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Mengapa Fungsi? Masalah Kode Berulang</strong><br><small style="color:#64748B">Bandingkan kode tanpa vs dengan custom blok</small></td><td><span class="blok-tag">define [nama blok]</span></td><td>Refactor: ubah kode berulang menjadi satu custom blok</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Custom Blok dengan Parameter</strong><br><small style="color:#64748B">Fungsi yang fleksibel berdasarkan input</small></td><td><span class="blok-tag">define [blok (param)]</span></td><td">Blok "gambar bintang ukuran: N" yang bisa dipanggil dengan ukuran berbeda</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Dekomposisi Program Kompleks</strong><br><small style="color:#64748B">Pecah game menjadi fungsi: setup, spawn, check, gameover</small></td><td>Multiple custom bloks</td><td>Refactor game sebelumnya menjadi fungsi-fungsi terstruktur</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — CUSTOM BLOK DENGAN PARAMETER</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">custom_blocks.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Define & Call</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- DEFINISI custom blok dengan parameter --</span>
+<span class="ev">define [Gambar Poligon sisi: (n_sisi) panjang: (panjang)]</span>
+<span class="i1">pen down</span>
+<span class="i1"><span class="ct">repeat</span> <span class="vr">(n_sisi)</span></span>
+<span class="i2"><span class="mo">move (panjang) steps</span></span>
+<span class="i2"><span class="mo">turn</span> <span class="op">((360) / (n_sisi)) degrees</span></span>
+<span class="i1">pen up</span>
+
+<span class="ev">define [Lompat tinggi: (tinggi)]</span>
+<span class="i1"><span class="ct">repeat 10</span></span>
+<span class="i2"><span class="mo">change y by</span> <span class="op">((tinggi) / 10)</span></span>
+<span class="i2"><span class="ct">wait 0.02 secs</span></span>
+<span class="i1"><span class="ct">repeat 10</span></span>
+<span class="i2"><span class="mo">change y by</span> <span class="op">((tinggi) / -10)</span></span>
+<span class="i2"><span class="ct">wait 0.02 secs</span></span>
+
+<span class="cm">-- PANGGILAN blok berkali-kali dengan nilai berbeda --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">erase all</span>
+<span class="i1"><span class="mo">go to x: -150 y: 0</span></span>
+<span class="i1">Gambar Poligon sisi: <span class="vr">3</span> panjang: <span class="vr">80</span>   <span class="cm">← segitiga</span></span>
+<span class="i1"><span class="mo">go to x: 0 y: 0</span></span>
+<span class="i1">Gambar Poligon sisi: <span class="vr">4</span> panjang: <span class="vr">80</span>   <span class="cm">← persegi</span></span>
+<span class="i1"><span class="mo">go to x: 150 y: 0</span></span>
+<span class="i1">Gambar Poligon sisi: <span class="vr">6</span> panjang: <span class="vr">50</span>   <span class="cm">← segi enam</span></span>
+
+<span class="cm">-- Lompat dengan ketinggian berbeda --</span>
+<span class="ev">when [Space] key pressed</span>
+<span class="i1">Lompat tinggi: <span class="vr">60</span>   <span class="cm">← lompat kecil</span></span>
+<span class="ev">when [Up arrow] key pressed</span>
+<span class="i1">Lompat tinggi: <span class="vr">120</span>  <span class="cm">← lompat tinggi</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 06</div><div class="uji-sub">VERIFIKASI FUNGSI & REUSABILITY</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Custom blok terdefinisi dan bisa dipanggil dari script manapun</li>
+          <li><div class="check-box"></div>Memanggil blok dengan parameter berbeda → hasil berbeda (bukan selalu sama)</li>
+          <li><div class="check-box"></div>Kode memanggil blok yang sama minimal 3 kali (membuktikan reusability)</li>
+          <li><div class="check-box"></div>Tidak ada blok yang copy-paste — semua pengulangan sudah dijadikan fungsi</li>
+          <li><div class="check-box"></div>Siswa bisa menjelaskan: apa itu parameter dan mengapa berguna?</li>
+          <li><div class="check-box"></div>Siswa bisa menunjukkan: ini kode Scratch, ini yang setara di Python</div></li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Buat blok "Animasi Muncul" yang bisa dipakai oleh semua sprite (parameter: durasi)</li>
+          <li>Refactor proyek game dari modul sebelumnya — setiap aksi utama jadi 1 custom blok</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 07 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 07</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header">
+      <div class="mod-num">07</div>
+      <div class="mod-header-text">
+        <h2>Broadcasting — Komunikasi Antar Sprite</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">📡 EVENTS</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami cara sprite saling "berkomunikasi" menggunakan pesan broadcast</li>
+          <li>Siswa mampu menggunakan broadcast untuk mengkoordinasikan aksi multi-sprite</li>
+          <li>Siswa dapat membangun alur cerita/game interaktif dengan banyak karakter yang terkoordinasi</li>
+        </ul>
+      </div>
+      <div class="concept-bridge">
+        <div class="cb-head"><div class="cb-ico">🐍</div><div><div class="cb-title">Paralel ke Python</div><div class="cb-sub">EVENT-DRIVEN PROGRAMMING</div></div></div>
+        <div class="cb-grid">
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">broadcast [mulai_game]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">pygame.event.post(event)</div></div>
+          <div class="cb-item"><div class="cbi-label">SCRATCH</div><div class="cbi-val">when I receive [mulai_game]</div></div>
+          <div class="cb-item"><div class="cbi-label">PYTHON</div><div class="cbi-val">if event.type == MULAI_GAME:</div></div>
+        </div>
+      </div>
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Broadcast Dasar</strong><br><small style="color:#64748B">Kirim & terima pesan antar sprite</small></td><td><span class="blok-tag">broadcast [pesan]</span> <span class="blok-tag">when I receive</span></td><td>Sprite A bilang sesuatu → Sprite B bereaksi otomatis</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Koordinasi Multi-Sprite</strong><br><small style="color:#64748B">Satu trigger mempengaruhi banyak sprite</small></td><td><span class="blok-tag">broadcast and wait</span></td><td">Dialog bergantian: narasi 3 karakter berurutan dengan timing</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>State Machine Sederhana</strong><br><small style="color:#64748B">Game state: menu → main → gameover via broadcast</small></td><td>Broadcast sebagai state trigger</td><td>Proyek: cerita interaktif 3 babak dengan banyak karakter</td></tr>
+        </tbody>
+      </table>
+      <div class="sec-title">CONTOH KODE — GAME STATE MACHINE VIA BROADCAST</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">game_states.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Broadcasting</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- SPRITE: Tombol Mulai (di menu) --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="lk">show</span>  <span class="cm">← tombol mulai terlihat</span></span>
+<span class="i1"><span class="lk">switch backdrop to [Menu]</span></span>
+
+<span class="ev">when this sprite clicked</span>
+<span class="i1"><span class="lk">hide</span>  <span class="cm">← sembunyikan tombol</span></span>
+<span class="i1">broadcast [mulai_game]  <span class="cm">← kirim sinyal ke semua sprite</span></span>
+
+<span class="cm">-- SPRITE: Karakter Pemain --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="lk">hide</span>  <span class="cm">← tersembunyi di menu</span></span>
+
+<span class="ev">when I receive [mulai_game]</span>
+<span class="i1"><span class="lk">show</span></span>
+<span class="i1"><span class="mo">go to x: 0 y: -100</span></span>
+<span class="i1"><span class="lk">switch backdrop to [Level_1]</span></span>
+<span class="i1"><span class="lk">say "Petualangan dimulai! 🗺️" for 2 secs</span></span>
+
+<span class="cm">-- SPRITE: Musuh (muncul setelah game mulai) --</span>
+<span class="ev">when I receive [mulai_game]</span>
+<span class="i1"><span class="lk">show</span></span>
+<span class="i1"><span class="mo">go to x: 150 y: -100</span></span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;touching [Pemain]?&gt;</span> <span class="ct">then</span></span>
+<span class="i3">broadcast [game_over]  <span class="cm">← kirim sinyal game over</span></span>
+<span class="i3"><span class="ct">stop [this script]</span></span>
+
+<span class="cm">-- SPRITE: Layar Game Over --</span>
+<span class="ev">when I receive [game_over]</span>
+<span class="i1"><span class="lk">show</span></span>
+<span class="i1"><span class="lk">switch backdrop to [GameOver]</span></span>
+<span class="i1"><span class="sd">play sound [GameOver] until done</span></span>
+<span class="i1"><span class="ct">stop [other scripts]</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba — Modul 07</div><div class="uji-sub">VERIFIKASI KOMUNIKASI ANTAR SPRITE</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div>Saat broadcast dikirim → semua sprite penerima bereaksi</li>
+          <li><div class="check-box"></div>Sprite yang tidak perlu pesan tidak terpengaruh</li>
+          <li><div class="check-box"></div>Urutan state: Menu → Game → Game Over berjalan benar tanpa tumpang tindih</li>
+          <li><div class="check-box"></div><code>broadcast and wait</code> menunggu penerima selesai sebelum lanjut</li>
+          <li><div class="check-box"></div>Tidak ada sprite yang "lupa muncul" atau "lupa sembunyi" saat state berubah</li>
+          <li><div class="check-box"></div>Siswa bisa menjelaskan: perbedaan <code>broadcast</code> vs <code>broadcast and wait</code></li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <div class="bonus-head"><div class="bonus-ico">⭐</div><div class="bonus-title">Tantangan Bonus</div></div>
+        <ul>
+          <li>Tambahkan state "Pause" — tombol P mengirim broadcast pause/resume</li>
+          <li>Buat cutscene otomatis: saat pemain mencapai flag, broadcast memicu dialog 3 karakter berurutan</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 08 ==================== -->
+  <div class="divider"><div class="divider-line"></div><div class="divider-chip">MODUL 08 — PROYEK AKHIR SMP</div><div class="divider-line rev"></div></div>
+
+  <div class="module">
+    <div class="mod-header" style="background: linear-gradient(135deg, #0C1829, #1E3A8A, #0369A1);">
+      <div class="mod-num" style="background:rgba(59,130,246,0.3)">08</div>
+      <div class="mod-header-text">
+        <h2>Proyek Akhir SMP: Platform Game 2D</h2>
+        <div class="mod-tags">
+          <span class="mod-tag">3 PERTEMUAN</span>
+          <span class="mod-tag">⏱ 3 × 60 MENIT</span>
+          <span class="mod-tag">🏆 CAPSTONE SMP</span>
+        </div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="obj-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menggabungkan seluruh konsep SMP: kondisi kompleks, loop, variabel, list, fungsi, dan broadcast</li>
+          <li>Siswa mengalami siklus pengembangan software: desain → kode → playtesting → iterasi</li>
+          <li>Siswa mampu mendokumentasikan dan mempresentasikan proyek secara teknis</li>
+        </ul>
+      </div>
+
+      <div class="proj-box">
+        <div class="proj-head">
+          <div class="proj-ico">🎮</div>
+          <div>
+            <div class="proj-title">Spesifikasi Proyek: "Petualangan Platformer"</div>
+            <div class="proj-sub">PLATFORM GAME 2D · MULTI-LEVEL · MULTI-SPRITE</div>
+          </div>
+        </div>
+        <div class="proj-spec">
+          <div class="ps-item"><div class="ps-label">MEKANISME</div><div class="ps-val">Lari, lompat, hindari musuh, kumpulkan koin</div></div>
+          <div class="ps-item"><div class="ps-label">LEVEL</div><div class="ps-val">Minimal 2 level dengan kesulitan meningkat</div></div>
+          <div class="ps-item"><div class="ps-label">SISTEM</div><div class="ps-val">Skor, nyawa (3), timer, level indicator</div></div>
+          <div class="ps-item"><div class="ps-label">INVENTORY</div><div class="ps-val">List koin dikumpulkan, power-up tersimpan</div></div>
+          <div class="ps-item"><div class="ps-label">FUNGSI</div><div class="ps-val">Custom blok: Lompat, SpawnMusuh, GameOver, LevelUp</div></div>
+          <div class="ps-item"><div class="ps-label">STATE</div><div class="ps-val">Menu → Level1 → Level2 → Win/Lose via broadcast</div></div>
+        </div>
+      </div>
+
+      <div class="sec-title">RINCIAN PER PERTEMUAN</div>
+      <table class="mat-table">
+        <thead><tr><th>PERTEMUAN</th><th>FOKUS</th><th>OUTPUT</th></tr></thead>
+        <tbody>
+          <tr><td><span class="p-badge">P-1</span></td><td><strong>Desain & Arsitektur</strong> — buat Game Design Document (GDD) sederhana, setup semua sprite & background, buat variabel & list yang diperlukan, definisikan semua custom blok (kosong dulu)</td><td>Struktur proyek siap, GDD tertulis</td></tr>
+          <tr><td><span class="p-badge">P-2</span></td><td><strong>Implementasi Mekanik Core</strong> — kode gerak + lompat pemain (dengan gravitasi), sistem koin + musuh, mekanisme nyawa, dan transisi level via broadcast</td><td>Game bisa dimainkan end-to-end</td></tr>
+          <tr><td><span class="p-badge">P-3</span></td><td><strong>Polish, Playtesting & Presentasi</strong> — balancing (kecepatan, jumlah musuh), efek suara & visual, playtesting silang antar siswa, perbaikan, dokumentasi singkat, presentasi 3 menit</td><td>Game selesai + presentasi + dokumentasi</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — GRAVITASI & LOMPAT (CORE MECHANIC)</div>
+      <div class="code-wrap">
+        <div class="code-top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <span class="code-file">player_physics.scratch</span>
+          <span class="code-lang">SCRATCH PSEUDO-CODE · Gravitasi Simulasi</span>
+        </div>
+        <div class="code-body">
+<span class="cm">-- Variabel: Kecepatan_Y untuk simulasi gravitasi --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="vr">set [Kecepatan_Y] to 0</span></span>
+<span class="i1"><span class="vr">set [Di_Tanah] to false</span></span>
+
+<span class="ev">define [Update Fisika]</span>
+<span class="i1"><span class="cm">-- Gravitasi: tarik ke bawah setiap frame --</span></span>
+<span class="i1"><span class="vr">change [Kecepatan_Y] by -1.5</span>  <span class="cm">← gravitasi</span></span>
+<span class="i1"><span class="mo">change y by (Kecepatan_Y)</span></span>
+
+<span class="i1"><span class="cm">-- Cek: menyentuh tanah (warna coklat) --</span></span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;touching color [coklat]?&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [Kecepatan_Y] to 0</span></span>
+<span class="i2"><span class="vr">set [Di_Tanah] to true</span></span>
+<span class="i2"><span class="cm">-- Dorong ke atas sampai tidak menempel --</span></span>
+<span class="i2"><span class="ct">repeat until</span> <span class="sn">NOT &lt;touching color [coklat]?&gt;</span></span>
+<span class="i3"><span class="mo">change y by 1</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="vr">set [Di_Tanah] to false</span></span>
+
+<span class="ev">define [Lompat]</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Di_Tanah)</span> = true&gt;</span> <span class="ct">then</span>  <span class="cm">← hanya bisa lompat jika di tanah</span></span>
+<span class="i2"><span class="vr">set [Kecepatan_Y] to 15</span>  <span class="cm">← dorongan ke atas</span></span>
+<span class="i2"><span class="sd">play sound [Jump]</span></span>
+
+<span class="cm">-- Main loop --</span>
+<span class="ev">when I receive [mulai_game]</span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2">Update Fisika</span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;key [right arrow] pressed?&gt;</span> <span class="ct">then</span> <span class="mo">change x by 5</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;key [left arrow] pressed?&gt;</span> <span class="ct">then</span> <span class="mo">change x by -5</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;key [up arrow] pressed?&gt;</span> <span class="ct">then</span> Lompat</span>
+        </div>
+      </div>
+
+      <div class="uji">
+        <div class="uji-head"><div class="uji-ico">✅</div><div><div class="uji-title">Checklist Uji Coba Final — Proyek Akhir SMP</div><div class="uji-sub">SEMUA POIN WAJIB SEBELUM PRESENTASI</div></div></div>
+        <ul class="checks">
+          <li><div class="check-box"></div><strong>State:</strong> Menu → Level 1 → Level 2 → Menang/Kalah via broadcast, tidak ada state yang skip</li>
+          <li><div class="check-box"></div><strong>Fisika:</strong> Pemain jatuh karena gravitasi, lompat hanya saat di tanah</li>
+          <li><div class="check-box"></div><strong>Koin:</strong> Masuk ke list saat dikumpulkan, skor bertambah sesuai</li>
+          <li><div class="check-box"></div><strong>Nyawa:</strong> Berkurang saat terkena musuh, game over jika habis</li>
+          <li><div class="check-box"></div><strong>Level Up:</strong> Transisi ke level 2 saat kondisi terpenuhi</li>
+          <li><div class="check-box"></div><strong>Custom Blok:</strong> Minimal 3 custom blok dengan parameter digunakan</li>
+          <li><div class="check-box"></div><strong>Restart:</strong> Bendera hijau → semua reset ke kondisi awal</li>
+          <li><div class="check-box"></div><strong>Presentasi:</strong> Siswa menjelaskan arsitektur (sprite apa, broadcast apa, custom blok apa)</li>
+          <li><div class="check-box"></div><strong>Koneksi Python:</strong> Siswa bisa menunjukkan 2 bagian kode yang "setara" di Python</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RUBRIK PENILAIAN PROYEK AKHIR SMP</div>
+      <table class="rubrik">
+        <thead>
+          <tr><th style="width:22%">ASPEK</th><th style="width:19%">SKOR 4</th><th style="width:19%">SKOR 3</th><th style="width:19%">SKOR 2</th><th style="width:19%">SKOR 1</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Fungsionalitas & Kelengkapan</strong></td>
+            <td><span class="s4">4</span> Semua fitur berjalan + 1 fitur bonus</td>
+            <td><span class="s3">3</span> Semua fitur utama berjalan</td>
+            <td><span class="s2">2</span> Sebagian fitur, ada bug signifikan</td>
+            <td><span class="s1">1</span> Game tidak bisa dimainkan</td>
+          </tr>
+          <tr>
+            <td><strong>Penggunaan Konsep SMP</strong></td>
+            <td><span class="s4">4</span> Semua 6 konsep (kondisi, loop, var, list, fungsi, broadcast) dipakai optimal</td>
+            <td><span class="s3">3</span> 4–5 konsep dipakai dengan benar</td>
+            <td><span class="s2">2</span> 2–3 konsep</td>
+            <td><span class="s1">1</span> Hanya 1 konsep</td>
+          </tr>
+          <tr>
+            <td><strong>Arsitektur Kode</strong></td>
+            <td><span class="s4">4</span> Kode terstruktur, ada custom blok, tidak ada pengulangan tidak perlu</td>
+            <td><span class="s3">3</span> Ada beberapa custom blok, sebagian kode rapi</td>
+            <td><span class="s2">2</span> Kode bekerja tapi tidak terstruktur</td>
+            <td><span class="s1">1</span> Kode campur aduk, sulit dibaca</td>
+          </tr>
+          <tr>
+            <td><strong>Presentasi & Koneksi Python</strong></td>
+            <td><span class="s4">4</span> Menjelaskan arsitektur + demo + mampu menunjukkan paralel Python</td>
+            <td><span class="s3">3</span> Menjelaskan cara kerja + demo lancar</td>
+            <td><span class="s2">2</span> Bisa demo, penjelasan terbatas</td>
+            <td><span class="s1">1</span> Tidak bisa menjelaskan</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center; padding:44px 20px 20px; border-top:2px solid var(--border); margin-top:56px;">
+    <div style="display:inline-flex; align-items:center; gap:14px; background:var(--primary-light); border:1.5px solid var(--primary-mid); border-radius:14px; padding:18px 28px;">
+      <span style="font-size:1.6rem">⚙️</span>
+      <div style="text-align:left">
+        <div style="font-weight:900; font-size:0.95rem; color:var(--primary-dark)">Selesai Level 2 SMP?</div>
+        <div style="font-size:0.82rem; color:var(--muted)">Lanjut ke Kurikulum SMA — Level 3: Algoritma, Rekursi & Siap Python</div>
+      </div>
+    </div>
+    <p style="margin-top:24px; font-family:'JetBrains Mono',monospace; font-size:10px; color:#CBD5E1; letter-spacing:1px;">
+      KURIKULUM SCRATCH → PYTHON · SMP LEVEL 2 · 8 MODUL · 24 PERTEMUAN
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

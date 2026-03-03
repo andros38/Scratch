@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurikulum Scratch SD — Level 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #FF6B35;
+    --primary-dark: #C2410C;
+    --primary-light: #FFF0EB;
+    --primary-mid: #FFD4C2;
+    --accent: #FFA500;
+    --dark: #0F172A;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --bg: #F8FAFC;
+    --white: #FFFFFF;
+    --green: #22C55E;
+    --green-light: #F0FDF4;
+    --blue: #3B82F6;
+    --blue-light: #EFF6FF;
+    --purple: #8B5CF6;
+    --purple-light: #F5F3FF;
+    --yellow: #EAB308;
+    --yellow-light: #FEFCE8;
+    --code-bg: #0F172A;
+    --code-text: #E2E8F0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .cover-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(255,107,53,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(255,165,0,0.12) 0%, transparent 50%);
+  }
+  .cover-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 700px; }
+  .cover-level-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.35);
+    color: #FFA07A;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 2.5px;
+    padding: 7px 18px; border-radius: 100px;
+    margin-bottom: 32px;
+  }
+  .cover h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 900; color: white; line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .cover h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #FF6B35 0%, #FFA500 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cover-subtitle {
+    font-size: 1.15rem; color: #94A3B8;
+    margin: 16px auto 40px; max-width: 500px; line-height: 1.7;
+  }
+  .cover-meta {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 12px 20px; text-align: left;
+  }
+  .cover-meta-item .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: #64748B; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .cover-meta-item .val { color: white; font-weight: 800; font-size: 1rem; }
+  .cover-decoration {
+    position: absolute; bottom: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #334155; letter-spacing: 2px;
+  }
+
+  /* ========== DOCUMENT BODY ========== */
+  .doc-body { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 56px 0 32px;
+  }
+  .section-divider-line { flex: 1; height: 1.5px; background: var(--border); }
+  .section-divider-badge {
+    background: var(--primary); color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    padding: 5px 14px; border-radius: 100px; white-space: nowrap;
+  }
+
+  /* MODULE CARD */
+  .module {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    page-break-inside: avoid;
+  }
+
+  .module-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    padding: 24px 28px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .module-num-circle {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700;
+    color: white; flex-shrink: 0; margin-top: 2px;
+  }
+  .module-header-text h2 {
+    color: white; font-size: 1.2rem; font-weight: 900; line-height: 1.2; margin-bottom: 4px;
+  }
+  .module-header-text .module-meta {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .module-meta-tag {
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px; font-weight: 700; padding: 2px 10px;
+    border-radius: 100px; font-family: 'Space Mono', monospace;
+  }
+
+  .module-body { padding: 28px; }
+
+  /* TUJUAN */
+  .objective-box {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px; margin-bottom: 24px;
+  }
+  .objective-box .obj-label {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    color: var(--primary-dark); letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .objective-box ul { padding-left: 18px; }
+  .objective-box li { font-size: 0.88rem; margin-bottom: 3px; color: var(--text); }
+
+  /* SECTION TITLES */
+  .sec-title {
+    font-size: 0.78rem; font-weight: 800; letter-spacing: 1.5px;
+    color: var(--primary-dark); font-family: 'Space Mono', monospace;
+    text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sec-title::after { content: ''; flex: 1; height: 1px; background: var(--primary-mid); }
+
+  /* MATERI TABLE */
+  .materi-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem; }
+  .materi-table th {
+    background: var(--primary-light); color: var(--primary-dark);
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--primary-mid);
+  }
+  .materi-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .materi-table tr:last-child td { border-bottom: none; }
+  .materi-table tr:hover td { background: #FFFAF8; }
+  .pertemuan-badge {
+    background: var(--primary-mid); color: var(--primary-dark);
+    font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 6px; white-space: nowrap;
+  }
+  .materi-blok {
+    display: inline-block; background: #F1F5F9;
+    border: 1px solid var(--border); border-radius: 6px;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    padding: 1px 7px; margin: 1px 2px; color: var(--primary-dark);
+  }
+
+  /* LANGKAH KEGIATAN */
+  .steps-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .step-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--bg); border-radius: 10px; padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .step-num {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: var(--primary); color: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 12px; margin-top: 1px;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 800; font-size: 0.88rem; margin-bottom: 3px; }
+  .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .step-duration {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); white-space: nowrap; margin-top: 3px;
+  }
+
+  /* CODE BLOCK */
+  .code-section { margin-bottom: 24px; }
+  .code-header {
+    background: #1E293B; border-radius: 10px 10px 0 0;
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dot {
+    width: 11px; height: 11px; border-radius: 50%;
+  }
+  .code-dot.red { background: #FF5F57; }
+  .code-dot.yellow { background: #FFBD2E; }
+  .code-dot.green { background: #28C840; }
+  .code-lang {
+    margin-left: auto; font-family: 'Space Mono', monospace;
+    font-size: 10px; color: #475569; letter-spacing: 1px;
+  }
+  .code-body {
+    background: var(--code-bg); border-radius: 0 0 10px 10px;
+    padding: 20px; overflow-x: auto;
+    font-family: 'Space Mono', monospace; font-size: 12.5px;
+    line-height: 1.7; color: var(--code-text);
+  }
+  /* Scratch pseudo-code coloring */
+  .sc-comment { color: #64748B; font-style: italic; }
+  .sc-event { color: #FCD34D; font-weight: 700; }
+  .sc-control { color: #60A5FA; font-weight: 700; }
+  .sc-motion { color: #34D399; }
+  .sc-looks { color: #A78BFA; }
+  .sc-sound { color: #F472B6; }
+  .sc-var { color: #FB923C; }
+  .sc-op { color: #22D3EE; }
+  .sc-sense { color: #86EFAC; }
+  .sc-indent { display: inline-block; padding-left: 24px; }
+  .sc-indent2 { display: inline-block; padding-left: 48px; }
+
+  /* UJI COBA BOX */
+  .uji-box {
+    background: var(--green-light);
+    border: 1.5px solid #86EFAC;
+    border-radius: 12px; padding: 20px; margin-bottom: 24px;
+  }
+  .uji-box .uji-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .uji-box .uji-icon {
+    width: 36px; height: 36px; background: var(--green);
+    border-radius: 9px; display: flex; align-items: center;
+    justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .uji-box .uji-title { font-weight: 900; font-size: 0.95rem; color: #166534; }
+  .uji-box .uji-sub { font-size: 0.78rem; color: #4ADE80; font-family: 'Space Mono', monospace; }
+  .uji-checklist { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .uji-checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.85rem; color: #166534; line-height: 1.45;
+  }
+  .uji-check {
+    width: 18px; height: 18px; border: 2px solid #4ADE80;
+    border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* TANTANGAN BOX */
+  .tantangan-box {
+    background: var(--yellow-light);
+    border: 1.5px solid #FDE047;
+    border-radius: 12px; padding: 20px; margin-bottom: 24px;
+  }
+  .tantangan-box .t-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .tantangan-box .t-icon {
+    width: 34px; height: 34px; background: var(--yellow);
+    border-radius: 9px; display: flex; align-items: center;
+    justify-content: center; font-size: 15px;
+  }
+  .tantangan-box .t-title { font-weight: 900; font-size: 0.92rem; color: #713F12; }
+  .tantangan-list { padding-left: 16px; }
+  .tantangan-list li { font-size: 0.83rem; color: #713F12; margin-bottom: 5px; }
+
+  /* PROYEK AKHIR */
+  .project-box {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    border-radius: 14px; padding: 24px; margin-bottom: 24px;
+  }
+  .project-box .p-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+  }
+  .project-box .p-icon {
+    width: 42px; height: 42px; background: var(--primary);
+    border-radius: 11px; display: flex; align-items: center;
+    justify-content: center; font-size: 18px;
+  }
+  .project-box .p-title { color: white; font-weight: 900; font-size: 1rem; }
+  .project-box .p-sub { color: #64748B; font-family: 'Space Mono', monospace; font-size: 10px; }
+  .project-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .project-spec-item { background: rgba(255,255,255,0.06); border-radius: 9px; padding: 12px 14px; }
+  .project-spec-item .ps-label {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    color: #64748B; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .project-spec-item .ps-val { color: #E2E8F0; font-size: 0.83rem; font-weight: 700; }
+
+  /* PENILAIAN */
+  .rubrik-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 10px; }
+  .rubrik-table th {
+    background: #1E293B; color: #94A3B8;
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 10px 12px; text-align: left;
+  }
+  .rubrik-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .rubrik-table tr:last-child td { border-bottom: none; }
+  .score-badge {
+    display: inline-block;
+    padding: 2px 9px; border-radius: 5px; font-weight: 800; font-size: 11px;
+  }
+  .score-4 { background: #DCFCE7; color: #166534; }
+  .score-3 { background: #DBEAFE; color: #1E40AF; }
+  .score-2 { background: #FEF9C3; color: #713F12; }
+  .score-1 { background: #FFE4E6; color: #9F1239; }
+
+  /* INFO TAGS */
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .info-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .info-card .ic-label { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; margin-bottom: 4px; }
+  .info-card .ic-val { font-weight: 800; font-size: 0.88rem; }
+
+  /* PAGE BREAK */
+  .page-break { page-break-before: always; padding-top: 24px; }
+
+  /* OVERVIEW TABLE */
+  .overview-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 32px; }
+  .overview-table th {
+    background: var(--primary); color: white;
+    padding: 11px 14px; text-align: left;
+    font-size: 10px; letter-spacing: 1px; font-family: 'Space Mono', monospace;
+  }
+  .overview-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .overview-table tr:hover td { background: var(--primary-light); }
+  .ov-done { color: var(--green); font-weight: 800; }
+
+  /* NAV */
+  .toc-card {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 28px; margin-bottom: 40px;
+  }
+  .toc-card h3 { font-size: 1rem; font-weight: 900; margin-bottom: 16px; }
+  .toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .toc-list li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .toc-list li:hover { background: var(--primary-light); }
+  .toc-num {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--primary-dark); min-width: 60px; font-weight: 700;
+  }
+  .toc-title { font-size: 0.88rem; font-weight: 700; flex: 1; }
+  .toc-dots { flex: 1; border-bottom: 1px dotted var(--border); }
+  .toc-page { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  @media print {
+    .cover { min-height: 100vh; }
+    .module { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-content">
+    <div class="cover-level-badge">🎮 LEVEL 1 · SEKOLAH DASAR</div>
+    <h1>Kurikulum<br><em>Scratch</em> SD</h1>
+    <p class="cover-subtitle">
+      Panduan lengkap pengajaran Scratch untuk siswa SD Kelas 4–6.<br>
+      Membangun fondasi logika pemrograman melalui eksplorasi, animasi, dan game sederhana.
+    </p>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">TOTAL MODUL</div>
+        <div class="val">8 Modul</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">TOTAL PERTEMUAN</div>
+        <div class="val">~24 Pertemuan</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">JENJANG</div>
+        <div class="val">Kelas 4–6 SD</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">PLATFORM</div>
+        <div class="val">Scratch 3.0</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-decoration">SCRATCH → PYTHON · KURIKULUM PEMROGRAMAN</div>
+</div>
+
+<!-- ==================== DOCUMENT BODY ==================== -->
+<div class="doc-body">
+
+  <!-- OVERVIEW -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">GAMBARAN UMUM</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="toc-card">
+    <h3>📋 Daftar Modul — SD Level 1</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">MODUL 01</span><span class="toc-title">Apa itu Scratch? Mengenal Antarmuka</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 02</span><span class="toc-title">Gerak & Animasi Dasar</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 03</span><span class="toc-title">Suara & Efek Visual</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 04</span><span class="toc-title">Kontrol Keyboard & Mouse</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 05</span><span class="toc-title">Pengenalan Kondisi (If-Then)</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 06</span><span class="toc-title">Pengulangan (Loop Dasar)</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 07</span><span class="toc-title">Variabel Sederhana & Skor</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+      <li><span class="toc-num">MODUL 08</span><span class="toc-title">Proyek Akhir SD: Game Mini</span><span class="toc-dots"></span><span class="toc-page">3 pertemuan</span></li>
+    </ul>
+  </div>
+
+  <table class="overview-table">
+    <thead>
+      <tr>
+        <th>MODUL</th>
+        <th>KONSEP UTAMA</th>
+        <th>BLOK SCRATCH</th>
+        <th>PROYEK</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>Antarmuka, Sprite, Stage</td><td><span class="materi-blok">when 🚩 clicked</span> <span class="materi-blok">say</span></td><td>Sprite menyapa</td></tr>
+      <tr><td><strong>02</strong></td><td>Koordinat, Rotasi, Animasi</td><td><span class="materi-blok">move</span> <span class="materi-blok">turn</span> <span class="materi-blok">next costume</span></td><td>Hewan berjalan</td></tr>
+      <tr><td><strong>03</strong></td><td>Suara, Efek grafis</td><td><span class="materi-blok">play sound</span> <span class="materi-blok">set effect</span></td><td>Cerita bersound</td></tr>
+      <tr><td><strong>04</strong></td><td>Event input, kontrol gerak</td><td><span class="materi-blok">key pressed</span> <span class="materi-blok">mouse down</span></td><td>Karakter kontrol</td></tr>
+      <tr><td><strong>05</strong></td><td>Kondisi if-then, sensing</td><td><span class="materi-blok">if...then</span> <span class="materi-blok">touching</span></td><td>Reaksi sentuhan</td></tr>
+      <tr><td><strong>06</strong></td><td>Loop repeat & forever</td><td><span class="materi-blok">repeat</span> <span class="materi-blok">forever</span> <span class="materi-blok">wait</span></td><td>Animasi berulang</td></tr>
+      <tr><td><strong>07</strong></td><td>Variabel, operasi angka</td><td><span class="materi-blok">set variable</span> <span class="materi-blok">change by</span></td><td>Skor counter</td></tr>
+      <tr><td><strong>08</strong></td><td>Integrasi semua konsep</td><td>Semua blok di atas</td><td>Game tangkap benda</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== MODUL 01 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 01</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">01</div>
+      <div class="module-header-text">
+        <h2>Apa itu Scratch? Mengenal Antarmuka</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🎯 FONDASI</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu mengenali bagian-bagian antarmuka Scratch (Stage, Sprite, Panel Blok)</li>
+          <li>Siswa mampu melakukan drag & drop blok dan menjalankan program pertama</li>
+          <li>Siswa memahami konsep bahwa program = urutan perintah</li>
+        </ul>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card"><div class="ic-label">KELAS</div><div class="ic-val">4–6 SD</div></div>
+        <div class="info-card"><div class="ic-label">PRASYARAT</div><div class="ic-val">Tidak ada</div></div>
+        <div class="info-card"><div class="ic-label">MEDIA</div><div class="ic-val">PC / Tablet + Scratch 3.0</div></div>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr>
+            <th>PERTEMUAN</th>
+            <th>TOPIK</th>
+            <th>BLOK YANG DIGUNAKAN</th>
+            <th>AKTIVITAS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Mengenal Scratch & Bagian Layar</strong><br><small style="color:#64748B">Stage, Sprite Area, Blok Panel, Script Area</small></td>
+            <td><span class="materi-blok">when 🚩 clicked</span></td>
+            <td>Tur antarmuka, ganti background, pilih sprite kucing</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Drag & Drop Blok Pertama</strong><br><small style="color:#64748B">Menyusun urutan blok, Run & Stop</small></td>
+            <td><span class="materi-blok">say</span> <span class="materi-blok">move 10 steps</span></td>
+            <td>Buat sprite berkata & bergerak, eksplorasi bebas</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Uji Coba & Mini Proyek</strong><br><small style="color:#64748B">Gabungkan blok, debug, simpan proyek</small></td>
+            <td><span class="materi-blok">say...for...secs</span> <span class="materi-blok">wait</span></td>
+            <td>Sprite menyapa dengan urutan dialog 3 baris</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">LANGKAH KEGIATAN (Pertemuan 2 — Contoh Detail)</div>
+      <div class="steps-container">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Pembukaan & Motivasi</div>
+            <div class="step-desc">Guru menanyakan "Apakah kalian pernah main game?" lalu menjelaskan bahwa game dibuat oleh programmer menggunakan kode. Tunjukkan contoh proyek Scratch yang sudah jadi.</div>
+          </div>
+          <div class="step-duration">10 menit</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Demo Guru — Menyusun Blok Pertama</div>
+            <div class="step-desc">Guru drag blok <strong>when 🚩 clicked</strong> → <strong>say "Halo!" for 2 secs</strong> → <strong>move 50 steps</strong>. Klik bendera hijau, amati hasilnya bersama.</div>
+          </div>
+          <div class="step-duration">15 menit</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Praktik Mandiri — Eksplorasi Bebas</div>
+            <div class="step-desc">Siswa mencoba menyusun minimal 4 blok sendiri. Boleh bereksperimen dengan blok apapun. Guru berkeliling membimbing.</div>
+          </div>
+          <div class="step-duration">25 menit</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Sharing & Refleksi</div>
+            <div class="step-desc">2–3 siswa menunjukkan hasil kerjanya ke kelas. Guru merangkum: "Kode adalah urutan perintah — komputer melakukan PERSIS yang kita tulis."</div>
+          </div>
+          <div class="step-duration">10 menit</div>
+        </div>
+      </div>
+
+      <div class="sec-title">CONTOH KODE — PROYEK MODUL 01</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots">
+            <div class="code-dot red"></div>
+            <div class="code-dot yellow"></div>
+            <div class="code-dot green"></div>
+          </div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Kucing</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- Blok 1: Ucapan Selamat Datang --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-looks">say "Halo! Namaku Scratch Cat 🐱" for 2 secs</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Aku akan menjadi temanmu belajar coding!" for 2 secs</span></div>
+<div class="sc-indent"><span class="sc-motion">move 50 steps</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Yuk mulai petualangan kita! 🚀" for 2 secs</span></div>
+
+<span class="sc-comment">-- Blok 2: Efek saat diklik --</span>
+<span class="sc-event">when this sprite clicked</span>
+<div class="sc-indent"><span class="sc-sound">play sound [Meow] until done</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Aduh! Jangan diklik dong 😂" for 1 secs</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 01</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Sprite muncul di Stage saat proyek dibuka</li>
+          <li><div class="uji-check"></div>Klik bendera hijau → sprite berkata sesuai urutan</li>
+          <li><div class="uji-check"></div>Dialog 1 muncul dulu, baru dialog 2, baru dialog 3 (urutan benar)</li>
+          <li><div class="uji-check"></div>Klik sprite → suara meow terdengar</li>
+          <li><div class="uji-check"></div>Proyek berhasil disimpan dan bisa dibuka kembali</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan: "Apa yang terjadi jika blok dipindah urutannya?"</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header">
+          <div class="t-icon">⭐</div>
+          <div class="t-title">Tantangan Bonus (Opsional)</div>
+        </div>
+        <ul class="tantangan-list">
+          <li>Tambahkan sprite kedua yang ikut berkata setelah sprite pertama selesai</li>
+          <li>Ganti background menjadi pemandangan kota atau luar angkasa</li>
+          <li>Buat sprite bergerak ke kiri LALU ke kanan setelah dialog selesai</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 02 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 02</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">02</div>
+      <div class="module-header-text">
+        <h2>Gerak & Animasi Dasar</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🏃 GERAK</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami sistem koordinat X-Y pada Stage Scratch</li>
+          <li>Siswa mampu membuat animasi berjalan dengan pergantian kostum</li>
+          <li>Siswa dapat membuat sprite memantul dan bergerak dalam pola tertentu</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Sistem Koordinat & Gerak Dasar</strong><br><small style="color:#64748B">Titik (0,0), sumbu X dan Y, go to</small></td>
+            <td><span class="materi-blok">go to x: y:</span> <span class="materi-blok">glide to</span></td>
+            <td>Eksplorasi posisi sprite dengan koordinat</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Rotasi & Animasi Kostum</strong><br><small style="color:#64748B">Rotate, flip, next costume</small></td>
+            <td><span class="materi-blok">turn degrees</span> <span class="materi-blok">next costume</span></td>
+            <td>Buat karakter berjalan dengan ganti kostum</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Pantul & Gerak Otomatis</strong><br><small style="color:#64748B">If on edge bounce, forever loop</small></td>
+            <td><span class="materi-blok">if on edge, bounce</span> <span class="materi-blok">forever</span></td>
+            <td>Proyek: hewan berjalan bolak-balik otomatis</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — ANIMASI KUCING BERJALAN</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Cat (2 kostum)</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- Setup posisi awal --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">set rotation style [left-right]</span></div>
+<div class="sc-indent"><span class="sc-motion">go to x: -200 y: -80</span></div>
+<div class="sc-indent"><span class="sc-looks">set size to 100%</span></div>
+
+<span class="sc-comment">-- Animasi berjalan selamanya --</span>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+<div class="sc-indent2"><span class="sc-motion">move 3 steps</span></div>
+<div class="sc-indent2"><span class="sc-looks">next costume</span>  <span class="sc-comment">← ganti kaki kiri/kanan</span></div>
+<div class="sc-indent2"><span class="sc-motion">if on edge, bounce</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.1 secs</span>  <span class="sc-comment">← atur kecepatan animasi</span></div>
+        </div>
+      </div>
+
+      <div class="sec-title">CONTOH KODE — GLIDE KE POSISI TERTENTU</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Roket 🚀</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- Roket terbang ke beberapa titik --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">go to x: -180 y: -130</span>  <span class="sc-comment">← posisi awal kiri bawah</span></div>
+<div class="sc-indent"><span class="sc-looks">say "3... 2... 1... Liftoff! 🚀" for 2 secs</span></div>
+<div class="sc-indent"><span class="sc-motion">glide 1 secs to x: 0 y: 0</span>  <span class="sc-comment">← gerak ke tengah</span></div>
+<div class="sc-indent"><span class="sc-motion">glide 1 secs to x: 180 y: 130</span>  <span class="sc-comment">← gerak ke kanan atas</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Sampai di bulan! 🌕" for 2 secs</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 02</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Sprite bergerak dari kiri ke kanan secara otomatis</li>
+          <li><div class="uji-check"></div>Kostum berganti-ganti sehingga terlihat seperti berjalan</li>
+          <li><div class="uji-check"></div>Sprite memantul dan berbalik arah saat mencapai tepi layar</li>
+          <li><div class="uji-check"></div>Sprite tidak terbalik posisinya (rotation style = left-right)</li>
+          <li><div class="uji-check"></div>Siswa bisa mengubah nilai <code>move</code> dan menjelaskan efeknya (lebih cepat/lambat)</li>
+          <li><div class="uji-check"></div>Siswa memahami koordinat: titik (0,0) = tengah layar</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Tambahkan sprite kedua (misalnya burung) yang bergerak dengan kecepatan berbeda</li>
+          <li>Buat sprite berputar 360° penuh saat diklik, lalu kembali normal</li>
+          <li>Buat sprite mengikuti jalur zigzag menggunakan beberapa glide berurutan</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 03 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 03</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">03</div>
+      <div class="module-header-text">
+        <h2>Suara & Efek Visual</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🎵 MULTIMEDIA</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menambahkan suara dari library dan merekam suara sendiri</li>
+          <li>Siswa mampu menggunakan efek grafis (warna, ukuran, ghost) pada sprite</li>
+          <li>Siswa mampu mengganti background untuk membuat cerita sederhana</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Suara dari Library</strong><br><small style="color:#64748B">Play sound, stop all sounds, volume</small></td>
+            <td><span class="materi-blok">play sound</span> <span class="materi-blok">stop all sounds</span></td>
+            <td>Pasang suara pada sprite, buat musik sederhana</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Efek Grafis & Ukuran</strong><br><small style="color:#64748B">Set effect, change size, show/hide</small></td>
+            <td><span class="materi-blok">set color effect</span> <span class="materi-blok">change size by</span></td>
+            <td>Sprite berubah warna & ukuran secara animasi</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Cerita Multi-Background</strong><br><small style="color:#64748B">Switch backdrop, sprite masuk/keluar</small></td>
+            <td><span class="materi-blok">switch backdrop to</span> <span class="materi-blok">show/hide</span></td>
+            <td>Cerita 3 babak dengan latar berbeda</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — CERITA ANIMASI BERSOUND EFFECT</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Proyek: Petualangan di Hutan</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- SPRITE: Karakter Utama --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-looks">switch backdrop to [forest]</span></div>
+<div class="sc-indent"><span class="sc-motion">go to x: -150 y: -50</span></div>
+<div class="sc-indent"><span class="sc-sound">play sound [Jungle] until done</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Wah! Aku sedang di hutan 🌳" for 2 secs</span></div>
+
+<span class="sc-comment">-- Sprite membesar dengan efek --</span>
+<div class="sc-indent"><span class="sc-looks">set size to 50%</span></div>
+<div class="sc-indent"><span class="sc-control">repeat 10</span></div>
+<div class="sc-indent2"><span class="sc-looks">change size by 5</span>  <span class="sc-comment">← tumbuh dari kecil ke normal</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.05 secs</span></div>
+
+<span class="sc-comment">-- Berjalan ke kanan --</span>
+<div class="sc-indent"><span class="sc-motion">glide 2 secs to x: 100 y: -50</span></div>
+<div class="sc-indent"><span class="sc-sound">play sound [Triumph] until done</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Aku menemukan harta karun! 🏆" for 3 secs</span></div>
+
+<span class="sc-comment">-- Efek warna saat menang --</span>
+<div class="sc-indent"><span class="sc-control">repeat 5</span></div>
+<div class="sc-indent2"><span class="sc-looks">change color effect by 25</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.1 secs</span></div>
+<div class="sc-indent"><span class="sc-looks">clear graphic effects</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 03</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Suara terdengar pada waktu yang tepat (sesuai urutan cerita)</li>
+          <li><div class="uji-check"></div>Background berganti sesuai babak cerita</li>
+          <li><div class="uji-check"></div>Setidaknya satu efek grafis berjalan (warna / ukuran / ghost)</li>
+          <li><div class="uji-check"></div>Sprite muncul (<code>show</code>) dan menghilang (<code>hide</code>) dengan benar</li>
+          <li><div class="uji-check"></div>Cerita memiliki awal, tengah, dan akhir yang jelas</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan perbedaan <code>play sound</code> vs <code>play sound until done</code></li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Rekam suara narasi sendiri menggunakan mikrofon untuk menceritakan kisah</li>
+          <li>Tambahkan efek "ghost" (transparansi) agar sprite terlihat seperti hantu</li>
+          <li>Buat tombol sprite yang, bila diklik, memainkan musik latar berbeda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 04 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 04</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">04</div>
+      <div class="module-header-text">
+        <h2>Kontrol Keyboard & Mouse</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🕹️ INPUT</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu mengontrol sprite menggunakan tombol panah keyboard</li>
+          <li>Siswa mampu membuat sprite bereaksi terhadap klik mouse</li>
+          <li>Siswa memahami konsep event-driven: sesuatu terjadi karena ada pemicu (trigger)</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Kontrol Keyboard Dasar</strong><br><small style="color:#64748B">Key pressed events, 4 arah panah</small></td>
+            <td><span class="materi-blok">when key pressed</span> <span class="materi-blok">change x by</span></td>
+            <td>Buat karakter bergerak 4 arah dengan panah</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Kontrol Mouse</strong><br><small style="color:#64748B">Mouse x/y, mouse down, go to mouse</small></td>
+            <td><span class="materi-blok">go to [mouse pointer]</span> <span class="materi-blok">mouse down?</span></td>
+            <td>Sprite mengikuti kursor, aksi saat klik</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Karakter Playable Lengkap</strong><br><small style="color:#64748B">Kombinasi keyboard + animasi kostum</small></td>
+            <td>Semua blok di atas + <span class="materi-blok">next costume</span></td>
+            <td>Proyek: karakter berjalan dengan animasi</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — KONTROL KARAKTER 4 ARAH</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Karakter Pemain</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- Setup --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">go to x: 0 y: 0</span></div>
+<div class="sc-indent"><span class="sc-motion">set rotation style [left-right]</span></div>
+
+<span class="sc-comment">-- Loop deteksi input terus-menerus --</span>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [right arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change x by 5</span>  <span class="sc-comment">← gerak kanan</span></div>
+<div style="padding-left:72px"><span class="sc-motion">point in direction 90</span></div>
+<div style="padding-left:72px"><span class="sc-looks">next costume</span></div>
+
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [left arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change x by -5</span>  <span class="sc-comment">← gerak kiri</span></div>
+<div style="padding-left:72px"><span class="sc-motion">point in direction -90</span></div>
+<div style="padding-left:72px"><span class="sc-looks">next costume</span></div>
+
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [up arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change y by 5</span>  <span class="sc-comment">← gerak atas</span></div>
+
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [down arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change y by -5</span>  <span class="sc-comment">← gerak bawah</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 04</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Tombol panah kanan → sprite bergerak ke kanan</li>
+          <li><div class="uji-check"></div>Tombol panah kiri → sprite bergerak ke kiri DAN menghadap kiri</li>
+          <li><div class="uji-check"></div>Tombol panah atas & bawah berfungsi dengan benar</li>
+          <li><div class="uji-check"></div>Kostum berganti saat bergerak (efek berjalan)</li>
+          <li><div class="uji-check"></div>Sprite tidak "terbalik kepala" saat bergerak kiri</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan apa itu "event" — sesuatu yang memicu aksi</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Tambahkan tombol Spasi untuk membuat sprite "melompat" (change y +80 lalu kembali)</li>
+          <li>Buat sprite meninggalkan jejak warna saat berjalan menggunakan fitur Pen</li>
+          <li>Batasi pergerakan agar sprite tidak keluar dari layar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 05 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 05</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">05</div>
+      <div class="module-header-text">
+        <h2>Pengenalan Kondisi (If-Then)</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🔀 LOGIKA</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami konsep "jika … maka …" sebagai inti pengambilan keputusan program</li>
+          <li>Siswa mampu menggunakan blok sensing untuk mendeteksi kondisi (sentuhan, warna)</li>
+          <li>Siswa dapat membuat program yang berbeda reaksinya tergantung situasi</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Konsep Kondisi & If-Then Dasar</strong><br><small style="color:#64748B">Analogi lampu merah, blok if</small></td>
+            <td><span class="materi-blok">if...then</span> <span class="materi-blok">touching?</span></td>
+            <td>Sprite bereaksi jika menyentuh tepi layar</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Sensing Lanjutan</strong><br><small style="color:#64748B">Touching color, touching sprite lain</small></td>
+            <td><span class="materi-blok">touching color?</span> <span class="materi-blok">touching [sprite]?</span></td>
+            <td>Sprite "menangkap" benda atau menghindari rintangan</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Proyek Reaksi Sentuhan</strong><br><small style="color:#64748B">Gabung gerak + kondisi + efek</small></td>
+            <td>Semua blok + <span class="materi-blok">play sound</span> <span class="materi-blok">say</span></td>
+            <td>Game: sprite menghindar dari musuh sederhana</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — DETEKSI SENTUHAN & REAKSI</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Pemain vs Musuh</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- SPRITE PEMAIN: deteksi tabrakan --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">go to x: 0 y: 0</span></div>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Gerak dengan keyboard --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [right arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change x by 5</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- CEK: apakah menyentuh sprite musuh? --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;touching [Musuh]?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-sound">play sound [Lose] until done</span></div>
+<div style="padding-left:72px"><span class="sc-looks">say "Game Over! 😱" for 2 secs</span></div>
+<div style="padding-left:72px"><span class="sc-control">stop [all]</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- CEK: apakah menyentuh bintang emas? --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;touching color [kuning]?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-sound">play sound [Collect] until done</span></div>
+<div style="padding-left:72px"><span class="sc-looks">say "Dapat bintang! ⭐ +10 poin" for 1 secs</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 05</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Program berjalan normal saat TIDAK ada tabrakan</li>
+          <li><div class="uji-check"></div>Saat sprite menyentuh musuh → reaksi yang benar terjadi (sound + pesan)</li>
+          <li><div class="uji-check"></div>Saat sprite menyentuh item positif → reaksi yang berbeda (bukan game over)</li>
+          <li><div class="uji-check"></div>Program berhenti (stop all) dengan benar setelah game over</li>
+          <li><div class="uji-check"></div>Tidak ada "false positive" — reaksi terjadi hanya saat benar-benar menyentuh</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan: "Apa yang terjadi jika kondisi TIDAK terpenuhi?"</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Tambahkan kondisi "if touching edge" untuk membuat sprite memantul tanpa ke luar layar</li>
+          <li>Buat 3 jenis benda berbeda: musuh (game over), koin (+poin), obat (+nyawa)</li>
+          <li>Buat sprite berubah warna HANYA saat cursor mouse berada di atasnya</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 06 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 06</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">06</div>
+      <div class="module-header-text">
+        <h2>Pengulangan (Loop Dasar)</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🔁 LOOP</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami mengapa pengulangan diperlukan (efisiensi kode)</li>
+          <li>Siswa mampu menggunakan <code>repeat N</code> untuk mengulangi N kali</li>
+          <li>Siswa mampu menggunakan <code>forever</code> untuk animasi yang terus berjalan</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Masalah Tanpa Loop</strong><br><small style="color:#64748B">Copy-paste vs loop — mana lebih baik?</small></td>
+            <td><span class="materi-blok">repeat 10</span></td>
+            <td>Buat 10 langkah tanpa loop vs pakai loop — bandingkan</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Forever Loop & Animasi Otomatis</strong><br><small style="color:#64748B">Forever, wait, efek berulang</small></td>
+            <td><span class="materi-blok">forever</span> <span class="materi-blok">wait secs</span></td>
+            <td>Animasi bintang berkelip / lampu berkedip</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Loop + Kondisi Dalam Loop</strong><br><small style="color:#64748B">If di dalam forever</small></td>
+            <td><span class="materi-blok">forever</span> + <span class="materi-blok">if...then</span></td>
+            <td>Proyek: hujan bintang animasi otomatis</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — ANIMASI BINTANG BERKELIP</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Bintang ⭐</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- Bintang 1: Berkelip selamanya --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">go to x: -100 y: 80</span></div>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+<div class="sc-indent2"><span class="sc-looks">set ghost effect to 0</span>  <span class="sc-comment">← terlihat penuh</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.5 secs</span></div>
+<div class="sc-indent2"><span class="sc-looks">set ghost effect to 80</span>  <span class="sc-comment">← hampir transparan</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.5 secs</span></div>
+
+<span class="sc-comment">-- Loop: berputar 360 derajat (10 kali) --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-control">repeat 36</span>  <span class="sc-comment">← 36 × 10° = 360°</span></div>
+<div class="sc-indent2"><span class="sc-motion">turn 10 degrees</span></div>
+<div class="sc-indent2"><span class="sc-control">wait 0.05 secs</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Selesai berputar! 💫" for 1 secs</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 06</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Animasi berulang terus-menerus tanpa henti (forever bekerja)</li>
+          <li><div class="uji-check"></div>Loop repeat N berhenti tepat setelah N kali</li>
+          <li><div class="uji-check"></div>Kecepatan animasi bisa diubah dengan mengubah nilai <code>wait</code></li>
+          <li><div class="uji-check"></div>Tidak ada kode yang copy-paste berulang (semua pakai loop)</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan: "Apa bedanya <code>repeat 10</code> dan <code>forever</code>?"</li>
+          <li><div class="uji-check"></div>Siswa bisa menghitung: jika repeat 4 × turn 90, berapa putaran total?</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Buat 5 sprite bintang berbeda dengan kecepatan kelip yang berbeda-beda</li>
+          <li>Gunakan loop untuk menggambar persegi (4 × maju + belok kanan 90°)</li>
+          <li>Buat animasi "hitungan mundur" 10 → 0 menggunakan repeat dan <code>say</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 07 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 07</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header">
+      <div class="module-num-circle">07</div>
+      <div class="module-header-text">
+        <h2>Variabel Sederhana & Skor</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">📦 VARIABEL</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami konsep variabel sebagai "kotak penyimpan data" bernama</li>
+          <li>Siswa mampu membuat, menampilkan, dan mengubah nilai variabel</li>
+          <li>Siswa dapat membuat sistem skor sederhana yang berubah saat kondisi terpenuhi</li>
+        </ul>
+      </div>
+
+      <div class="sec-title">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Konsep Variabel</strong><br><small style="color:#64748B">Apa itu variabel? Buat & tampilkan</small></td>
+            <td><span class="materi-blok">set [var] to</span> <span class="materi-blok">show variable</span></td>
+            <td>Buat variabel "Skor", set ke 0, tampilkan di layar</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Mengubah Nilai Variabel</strong><br><small style="color:#64748B">Change by, operasi aritmatika</small></td>
+            <td><span class="materi-blok">change [var] by</span> <span class="materi-blok">( + )</span></td>
+            <td>Skor bertambah saat klik sprite, berkurang saat waktu habis</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Sistem Skor Lengkap</strong><br><small style="color:#64748B">Skor + kondisi menang/kalah</small></td>
+            <td>Semua blok + <span class="materi-blok">if [skor] > 10</span></td>
+            <td>Proyek: counter klik dengan target menang</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE — SISTEM SKOR LENGKAP</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Proyek: Klik Untuk Menang!</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- SETUP: Inisialisasi variabel --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-var">set [Skor] to 0</span></div>
+<div class="sc-indent"><span class="sc-var">set [Target] to 10</span></div>
+<div class="sc-indent"><span class="sc-var">show variable [Skor]</span></div>
+<div class="sc-indent"><span class="sc-looks">say "Klik aku 10 kali untuk menang! 🎯" for 2 secs</span></div>
+<div class="sc-indent"><span class="sc-looks">set size to 100%</span></div>
+
+<span class="sc-comment">-- Aksi saat sprite diklik --</span>
+<span class="sc-event">when this sprite clicked</span>
+<div class="sc-indent"><span class="sc-var">change [Skor] by 1</span>  <span class="sc-comment">← tambah 1 tiap klik</span></div>
+<div class="sc-indent"><span class="sc-looks">change size by -5</span>  <span class="sc-comment">← sprite mengecil sebentar</span></div>
+<div class="sc-indent"><span class="sc-sound">play sound [Pop]</span></div>
+<div class="sc-indent"><span class="sc-control">wait 0.1 secs</span></div>
+<div class="sc-indent"><span class="sc-looks">change size by 5</span>  <span class="sc-comment">← balik normal</span></div>
+
+<span class="sc-comment">-- CEK: apakah skor sudah mencapai target? --</span>
+<div class="sc-indent"><span class="sc-control">if</span> <span class="sc-sense">&lt;<span class="sc-var">(Skor)</span> <span class="sc-op">= (Target)</span>&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:48px"><span class="sc-sound">play sound [Win] until done</span></div>
+<div style="padding-left:48px"><span class="sc-looks">say "🏆 SELAMAT! Kamu Menang!" for 3 secs</span></div>
+<div style="padding-left:48px"><span class="sc-looks">set color effect to 50</span></div>
+<div style="padding-left:48px"><span class="sc-control">stop [all]</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba — Modul 07</div>
+            <div class="uji-sub">VERIFIKASI SEBELUM LANJUT KE MODUL BERIKUTNYA</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div>Variabel Skor mulai dari 0 setiap kali bendera hijau diklik</li>
+          <li><div class="uji-check"></div>Skor bertambah tepat 1 setiap kali sprite diklik</li>
+          <li><div class="uji-check"></div>Nilai skor tampil di layar (pojok kiri atas)</li>
+          <li><div class="uji-check"></div>Saat skor = 10, pesan menang muncul dan program berhenti</li>
+          <li><div class="uji-check"></div>Program tidak bisa diklik lagi setelah game over (stop all)</li>
+          <li><div class="uji-check"></div>Siswa bisa menjelaskan: "Apa perbedaan <code>set to</code> dan <code>change by</code>?"</li>
+        </ul>
+      </div>
+
+      <div class="tantangan-box">
+        <div class="t-header"><div class="t-icon">⭐</div><div class="t-title">Tantangan Bonus</div></div>
+        <ul class="tantangan-list">
+          <li>Tambahkan variabel "Nyawa" yang berkurang jika klik meleset (klik Stage bukan sprite)</li>
+          <li>Buat sprite berpindah posisi acak setiap kali diklik (<code>go to random position</code>)</li>
+          <li>Tampilkan variabel "Skor Tertinggi" yang tersimpan meski game di-restart</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 08 ==================== -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-badge">MODUL 08 — PROYEK AKHIR</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="module">
+    <div class="module-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);">
+      <div class="module-num-circle" style="background:rgba(255,107,53,0.3)">08</div>
+      <div class="module-header-text">
+        <h2>Proyek Akhir SD: Game Tangkap Benda</h2>
+        <div class="module-meta">
+          <span class="module-meta-tag">3 PERTEMUAN</span>
+          <span class="module-meta-tag">⏱ 3 × 60 MENIT</span>
+          <span class="module-meta-tag">🏆 CAPSTONE</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <div class="objective-box">
+        <div class="obj-label">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menggabungkan semua konsep: gerak, suara, kondisi, loop, dan variabel</li>
+          <li>Siswa mengalami siklus pembuatan game: desain → kode → uji → perbaiki</li>
+          <li>Siswa mampu mempresentasikan dan menjelaskan cara kerja gamenya sendiri</li>
+        </ul>
+      </div>
+
+      <div class="project-box">
+        <div class="p-header">
+          <div class="p-icon">🎮</div>
+          <div>
+            <div class="p-title">Spesifikasi Proyek: "Tangkap Buah!"</div>
+            <div class="p-sub">GAME ARCADE SEDERHANA · SATU PEMAIN</div>
+          </div>
+        </div>
+        <div class="project-spec">
+          <div class="project-spec-item">
+            <div class="ps-label">MEKANISME</div>
+            <div class="ps-val">Keranjang digerakkan kiri-kanan, tangkap buah jatuh</div>
+          </div>
+          <div class="project-spec-item">
+            <div class="ps-label">SKOR</div>
+            <div class="ps-val">+10 per buah ditangkap, -1 nyawa jika jatuh</div>
+          </div>
+          <div class="project-spec-item">
+            <div class="ps-label">KONDISI MENANG</div>
+            <div class="ps-val">Skor mencapai 100 poin</div>
+          </div>
+          <div class="project-spec-item">
+            <div class="ps-label">KONDISI KALAH</div>
+            <div class="ps-val">Nyawa habis (mulai dari 3 nyawa)</div>
+          </div>
+          <div class="project-spec-item">
+            <div class="ps-label">SPRITE</div>
+            <div class="ps-val">Keranjang (pemain), Buah (jatuh), Latar hutan</div>
+          </div>
+          <div class="project-spec-item">
+            <div class="ps-label">SUARA</div>
+            <div class="ps-val">Catch sound, drop sound, win/lose music</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-title">RINCIAN PER PERTEMUAN</div>
+      <table class="materi-table">
+        <thead>
+          <tr><th>PERTEMUAN</th><th>FOKUS</th><th>OUTPUT</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pertemuan-badge">P-1</span></td>
+            <td><strong>Desain & Setup</strong> — gambar sprite sendiri di editor Scratch, tentukan warna, atur posisi awal, buat variabel Skor & Nyawa</td>
+            <td>Stage siap, 2 sprite selesai, variabel ada</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-2</span></td>
+            <td><strong>Koding Mekanik Utama</strong> — keranjang bergerak dengan keyboard, buah jatuh dengan kecepatan acak, deteksi tangkapan dan miss</td>
+            <td>Game bisa dimainkan (belum ada win/lose)</td>
+          </tr>
+          <tr>
+            <td><span class="pertemuan-badge">P-3</span></td>
+            <td><strong>Finishing & Presentasi</strong> — tambah screen menang/kalah, suara, efek, playtesting dengan teman, presentasi 2 menit ke kelas</td>
+            <td>Game selesai + presentasi</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sec-title">CONTOH KODE LENGKAP — GAME TANGKAP BUAH</div>
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Keranjang 🧺</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- KERANJANG: Setup & Kontrol --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-motion">go to x: 0 y: -150</span>  <span class="sc-comment">← posisi bawah layar</span></div>
+<div class="sc-indent"><span class="sc-looks">set size to 80%</span></div>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [left arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change x by -8</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;key [right arrow] pressed?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change x by 8</span></div>
+<div class="sc-indent2"><span class="sc-comment">-- Batas layar kiri & kanan --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;(x position) &gt; 200&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">set x to 200</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;(x position) &lt; -200&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-motion">set x to -200</span></div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <div class="code-lang">SCRATCH PSEUDO-CODE · Sprite: Buah 🍎</div>
+        </div>
+        <div class="code-body">
+<span class="sc-comment">-- BUAH: Jatuh dari atas --</span>
+<span class="sc-event">when green flag clicked</span>
+<div class="sc-indent"><span class="sc-var">set [Skor] to 0</span></div>
+<div class="sc-indent"><span class="sc-var">set [Nyawa] to 3</span></div>
+<div class="sc-indent"><span class="sc-control">forever</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Reset posisi ke atas layar, posisi X acak --</span></div>
+<div class="sc-indent2"><span class="sc-motion">go to x: (pick random -180 to 180) y: 170</span></div>
+<div class="sc-indent2"><span class="sc-looks">show</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Jatuh sampai ke bawah atau ditangkap --</span></div>
+<div class="sc-indent2"><span class="sc-control">repeat until</span> <span class="sc-sense">&lt;(y position) &lt; -170&gt;</span></div>
+<div style="padding-left:72px"><span class="sc-motion">change y by -5</span>  <span class="sc-comment">← kecepatan jatuh</span></div>
+<div style="padding-left:72px"><span class="sc-control">wait 0.01 secs</span></div>
+
+<div style="padding-left:72px"><span class="sc-comment">-- Cek: ditangkap keranjang? --</span></div>
+<div style="padding-left:72px"><span class="sc-control">if</span> <span class="sc-sense">&lt;touching [Keranjang]?&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:96px"><span class="sc-var">change [Skor] by 10</span></div>
+<div style="padding-left:96px"><span class="sc-sound">play sound [Collect]</span></div>
+<div style="padding-left:96px"><span class="sc-looks">hide</span></div>
+<div style="padding-left:96px"><span class="sc-control">stop [this script]</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Buah tidak tertangkap → kurangi nyawa --</span></div>
+<div class="sc-indent2"><span class="sc-looks">hide</span></div>
+<div class="sc-indent2"><span class="sc-var">change [Nyawa] by -1</span></div>
+<div class="sc-indent2"><span class="sc-sound">play sound [Lose Life]</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Cek: nyawa habis? --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;<span class="sc-var">(Nyawa)</span> <span class="sc-op">= 0</span>&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-looks">say "💀 GAME OVER!" for 2 secs</span></div>
+<div style="padding-left:72px"><span class="sc-sound">play sound [Game Over] until done</span></div>
+<div style="padding-left:72px"><span class="sc-control">stop [all]</span></div>
+
+<div class="sc-indent2"><span class="sc-comment">-- Cek: skor mencapai 100? --</span></div>
+<div class="sc-indent2"><span class="sc-control">if</span> <span class="sc-sense">&lt;<span class="sc-var">(Skor)</span> <span class="sc-op">≥ 100</span>&gt;</span> <span class="sc-control">then</span></div>
+<div style="padding-left:72px"><span class="sc-looks">say "🏆 KAMU MENANG! Skor: " + Skor for 3 secs</span></div>
+<div style="padding-left:72px"><span class="sc-sound">play sound [Victory] until done</span></div>
+<div style="padding-left:72px"><span class="sc-control">stop [all]</span></div>
+        </div>
+      </div>
+
+      <div class="uji-box">
+        <div class="uji-header">
+          <div class="uji-icon">✅</div>
+          <div>
+            <div class="uji-title">Checklist Uji Coba Final — Proyek Akhir SD</div>
+            <div class="uji-sub">SEMUA POIN HARUS TERPENUHI SEBELUM PRESENTASI</div>
+          </div>
+        </div>
+        <ul class="uji-checklist">
+          <li><div class="uji-check"></div><strong>Reset:</strong> Klik bendera hijau → Skor = 0, Nyawa = 3, game mulai dari awal</li>
+          <li><div class="uji-check"></div><strong>Kontrol:</strong> Keranjang bergerak kiri-kanan dengan tombol panah, tidak keluar layar</li>
+          <li><div class="uji-check"></div><strong>Buah jatuh:</strong> Buah muncul di posisi X acak dan jatuh dari atas ke bawah</li>
+          <li><div class="uji-check"></div><strong>Tangkap:</strong> Saat buah menyentuh keranjang → Skor +10, suara catch, buah hilang</li>
+          <li><div class="uji-check"></div><strong>Miss:</strong> Saat buah sampai bawah tanpa ditangkap → Nyawa berkurang 1</li>
+          <li><div class="uji-check"></div><strong>Game Over:</strong> Nyawa = 0 → pesan game over + suara + program berhenti</li>
+          <li><div class="uji-check"></div><strong>Menang:</strong> Skor ≥ 100 → pesan menang + suara kemenangan</li>
+          <li><div class="uji-check"></div><strong>Tampilan:</strong> Skor dan Nyawa tampil di layar sepanjang permainan</li>
+          <li><div class="uji-check"></div><strong>Presentasi:</strong> Siswa mampu menjelaskan 1 bagian kode yang mereka buat sendiri</li>
+        </ul>
+      </div>
+
+      <!-- RUBRIK PENILAIAN -->
+      <div class="sec-title">RUBRIK PENILAIAN PROYEK AKHIR</div>
+      <table class="rubrik-table">
+        <thead>
+          <tr>
+            <th style="width:25%">ASPEK</th>
+            <th style="width:18%">SKOR 4 (Sangat Baik)</th>
+            <th style="width:18%">SKOR 3 (Baik)</th>
+            <th style="width:18%">SKOR 2 (Cukup)</th>
+            <th style="width:18%">SKOR 1 (Perlu Bimbingan)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Fungsionalitas Game</strong></td>
+            <td><span class="score-badge score-4">4</span> Semua fitur berjalan sempurna</td>
+            <td><span class="score-badge score-3">3</span> Fitur utama berjalan, ada 1-2 bug minor</td>
+            <td><span class="score-badge score-2">2</span> Sebagian berjalan, ada bug signifikan</td>
+            <td><span class="score-badge score-1">1</span> Game tidak bisa dimainkan</td>
+          </tr>
+          <tr>
+            <td><strong>Penggunaan Konsep</strong></td>
+            <td><span class="score-badge score-4">4</span> Semua 5 konsep digunakan dengan benar</td>
+            <td><span class="score-badge score-3">3</span> 4 dari 5 konsep digunakan</td>
+            <td><span class="score-badge score-2">2</span> 2-3 konsep digunakan</td>
+            <td><span class="score-badge score-1">1</span> Hanya 1 konsep atau kurang</td>
+          </tr>
+          <tr>
+            <td><strong>Kreativitas Desain</strong></td>
+            <td><span class="score-badge score-4">4</span> Sprite & background orisinal, tema konsisten</td>
+            <td><span class="score-badge score-3">3</span> Ada modifikasi dari template</td>
+            <td><span class="score-badge score-2">2</span> Menggunakan sprite default tanpa modifikasi</td>
+            <td><span class="score-badge score-1">1</span> Tidak ada upaya desain</td>
+          </tr>
+          <tr>
+            <td><strong>Presentasi & Penjelasan</strong></td>
+            <td><span class="score-badge score-4">4</span> Menjelaskan logika kode dengan jelas & percaya diri</td>
+            <td><span class="score-badge score-3">3</span> Bisa menjelaskan dengan sedikit bantuan</td>
+            <td><span class="score-badge score-2">2</span> Menjelaskan hanya apa yang dilakukan game</td>
+            <td><span class="score-badge score-1">1</span> Tidak bisa menjelaskan</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center; padding: 40px 20px 20px; border-top: 2px solid var(--border); margin-top: 56px;">
+    <div style="display:inline-flex; align-items:center; gap:12px; background:var(--primary-light); border-radius:12px; padding:16px 24px;">
+      <span style="font-size:1.5rem">🐍</span>
+      <div style="text-align:left">
+        <div style="font-weight:900; font-size:0.95rem; color:var(--primary-dark)">Selesai Level 1 SD?</div>
+        <div style="font-size:0.82rem; color:var(--muted)">Lanjut ke Kurikulum SMP — Level 2: Logika & Struktur</div>
+      </div>
+    </div>
+    <p style="margin-top:24px; font-family:'Space Mono',monospace; font-size:10px; color:#CBD5E1; letter-spacing:1px;">
+      KURIKULUM SCRATCH → PYTHON · SD LEVEL 1 · 8 MODUL · 24 PERTEMUAN
+    </p>
+  </div>
+
+</div><!-- /doc-body -->
+</body>
+</html>

@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurikulum Scratch SMA — Level 3</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --p: #8B5CF6;
+    --pd: #6D28D9;
+    --pdd: #4C1D95;
+    --pl: #F5F3FF;
+    --pm: #DDD6FE;
+    --acc: #EC4899;
+    --acc2: #A855F7;
+    --cyan: #06B6D4;
+    --green: #10B981;
+    --gl: #ECFDF5;
+    --yellow: #F59E0B;
+    --yl: #FFFBEB;
+    --red: #EF4444;
+    --dark: #0A0A14;
+    --dark2: #111128;
+    --dark3: #1A1A35;
+    --text: #1E1B4B;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --bg: #F8F7FF;
+    --white: #FFFFFF;
+    --cb: #0A0A14;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ===== COVER ===== */
+  .cover {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 64px 40px;
+    position: relative; overflow: hidden;
+  }
+  .cover-aurora {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(139,92,246,0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(236,72,153,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 30%, rgba(6,182,212,0.1) 0%, transparent 40%);
+  }
+  .cover-noise {
+    position: absolute; inset: 0; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+  .cover-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(139,92,246,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,92,246,0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .cover-content { position: relative; z-index: 2; max-width: 740px; }
+
+  .level-badge {
+    display: inline-flex; align-items: center; gap: 12px;
+    border: 1px solid rgba(139,92,246,0.4);
+    background: rgba(139,92,246,0.1);
+    padding: 8px 22px; border-radius: 100px; margin-bottom: 36px;
+  }
+  .lb-icon { font-size: 14px; }
+  .lb-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; color: #C4B5FD;
+  }
+
+  .cover h1 {
+    font-size: clamp(2.6rem, 6.5vw, 4.5rem);
+    font-weight: 900; color: white; line-height: 1.0; margin-bottom: 12px;
+  }
+  .cover h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #A78BFA 0%, #EC4899 60%, #06B6D4 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cover-tagline {
+    font-size: 1.1rem; color: #6B7280;
+    margin: 18px auto 44px; max-width: 540px; line-height: 1.75;
+  }
+  .cover-stats {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+  .cs {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 14px 22px;
+  }
+  .cs-l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; color: #4B5563; letter-spacing: 1.5px; margin-bottom: 4px;
+  }
+  .cs-v { color: white; font-weight: 800; font-size: 1.05rem; }
+
+  .path-bar {
+    position: absolute; bottom: 36px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 8px; align-items: center;
+  }
+  .pb {
+    border-radius: 8px; padding: 5px 14px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px;
+    border: 1px solid transparent;
+  }
+  .pb.done { color: #34D399; border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
+  .pb.active { color: #C4B5FD; border-color: rgba(196,181,253,0.3); background: rgba(139,92,246,0.1); }
+  .pb.next { color: #374151; border-color: rgba(255,255,255,0.05); }
+
+  /* ===== DOC ===== */
+  .doc { max-width: 900px; margin: 0 auto; padding: 56px 32px 80px; }
+
+  /* DIVIDER */
+  .div {
+    display: flex; align-items: center; gap: 14px; margin: 60px 0 30px;
+  }
+  .div-l { flex: 1; height: 1px; background: linear-gradient(90deg, var(--pm), transparent); }
+  .div-l.r { background: linear-gradient(90deg, transparent, var(--pm)); }
+  .div-chip {
+    background: var(--p); color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    padding: 5px 16px; border-radius: 100px; white-space: nowrap;
+  }
+
+  /* OVERVIEW */
+  .ov-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 28px; margin-bottom: 36px;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.07);
+  }
+  .ov-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 18px; }
+  .toc-r {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 8px; margin-bottom: 4px;
+  }
+  .toc-r:hover { background: var(--pl); }
+  .toc-m { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--pd); min-width:68px; font-weight:700; }
+  .toc-n { font-size:0.86rem; font-weight:700; flex:1; }
+  .toc-d { flex:1; border-bottom:1px dotted var(--border); }
+  .toc-p { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); }
+
+  .ov-tbl { width:100%; border-collapse:collapse; font-size:0.83rem; margin-bottom:28px; }
+  .ov-tbl th {
+    background: var(--dark); color: #6B7280;
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px;
+    padding:10px 14px; text-align:left;
+  }
+  .ov-tbl th:first-child { border-radius:8px 0 0 0; }
+  .ov-tbl th:last-child { border-radius:0 8px 0 0; }
+  .ov-tbl td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .ov-tbl tr:hover td { background:var(--pl); }
+  .bt {
+    display:inline-block; background:#F3F4F6;
+    border:1px solid var(--border); border-radius:5px;
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    padding:1px 7px; margin:1px 2px; color:var(--pd);
+  }
+
+  /* MODULE */
+  .mod {
+    background: var(--white); border:1.5px solid var(--border);
+    border-radius: 22px; margin-bottom: 48px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.08);
+  }
+
+  .mh {
+    background: linear-gradient(135deg, var(--pdd) 0%, var(--pd) 45%, var(--acc2) 100%);
+    padding: 26px 30px;
+    display: flex; align-items: flex-start; gap: 18px;
+    position: relative; overflow: hidden;
+  }
+  .mh::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .mh::after {
+    content: '';
+    position: absolute; bottom: -20px; left: 30%;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .mn {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px; font-weight: 700; color: white; margin-top: 2px;
+    position: relative; z-index: 1;
+  }
+  .mht { position: relative; z-index: 1; }
+  .mht h2 { color:white; font-size:1.2rem; font-weight:800; line-height:1.2; margin-bottom:7px; }
+  .mt { display:flex; gap:7px; flex-wrap:wrap; }
+  .mtag {
+    background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.85);
+    font-size:10px; font-weight:700;
+    padding:3px 11px; border-radius:100px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  .mb { padding:30px; }
+
+  /* OBJ */
+  .obj {
+    background:var(--pl); border-left:4px solid var(--p);
+    border-radius:0 10px 10px 0; padding:14px 18px; margin-bottom:22px;
+  }
+  .obj-l { font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--pd); letter-spacing:2px; margin-bottom:6px; }
+  .obj ul { padding-left:16px; }
+  .obj li { font-size:0.87rem; margin-bottom:3px; }
+
+  /* INFO GRID */
+  .ig { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:22px; }
+  .ic { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; }
+  .icl { font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:1px; margin-bottom:4px; }
+  .icv { font-weight:800; font-size:0.87rem; }
+
+  /* SEC TITLE */
+  .st {
+    font-size:9px; font-weight:800; letter-spacing:2px;
+    color:var(--pd); font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase; margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .st::after { content:''; flex:1; height:1px; background:var(--pm); }
+
+  /* TABLE */
+  .tt { width:100%; border-collapse:collapse; margin-bottom:22px; font-size:0.83rem; }
+  .tt th {
+    background:var(--pl); color:var(--pd);
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px;
+    padding:10px 14px; text-align:left; border-bottom:2px solid var(--pm);
+  }
+  .tt td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .tt tr:last-child td { border-bottom:none; }
+  .tt tr:hover td { background:#FDFCFF; }
+  .pb2 {
+    background:var(--pm); color:var(--pd);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700;
+    padding:2px 8px; border-radius:5px; white-space:nowrap;
+  }
+
+  /* CODE */
+  .cw { margin-bottom:22px; border-radius:12px; overflow:hidden; }
+  .ct2 {
+    background:#13131F; padding:10px 16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .ds { display:flex; gap:6px; }
+  .d { width:11px; height:11px; border-radius:50%; }
+  .dr { background:#FF5F57; }
+  .dy { background:#FFBD2E; }
+  .dg { background:#28C840; }
+  .cf { font-family:'IBM Plex Mono',monospace; font-size:10px; color:#8B5CF6; margin-left:6px; }
+  .cl { margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#374151; letter-spacing:1px; }
+  .cb2 {
+    background:var(--cb); padding:20px;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    line-height:1.8; color:#CBD5E1; overflow-x:auto;
+  }
+  /* syntax */
+  .cm { color:#3F4F63; font-style:italic; }
+  .ev { color:#FCD34D; font-weight:700; }
+  .ct { color:#60A5FA; font-weight:700; }
+  .mo { color:#34D399; }
+  .lk { color:#C084FC; }
+  .sn { color:#86EFAC; }
+  .vr { color:#FB923C; font-weight:600; }
+  .op { color:#22D3EE; }
+  .sd { color:#F472B6; }
+  .fn { color:#A78BFA; font-weight:700; }
+  .kw { color:#F472B6; font-weight:700; }
+  .num { color:#34D399; }
+  .str { color:#FCD34D; }
+  .py { color:#86EFAC; }
+
+  .i1 { display:block; padding-left:24px; }
+  .i2 { display:block; padding-left:48px; }
+  .i3 { display:block; padding-left:72px; }
+  .i4 { display:block; padding-left:96px; }
+
+  /* CONCEPT */
+  .bridge {
+    background: linear-gradient(135deg, #0A0A14 0%, #13132A 100%);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px; padding: 18px; margin-bottom: 22px;
+  }
+  .bh { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .bi { width:32px; height:32px; background:rgba(139,92,246,0.3); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+  .bt2 { color:#C4B5FD; font-weight:800; font-size:0.88rem; }
+  .bs { color:#8B5CF6; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px; }
+  .bg { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .bi2 { background:rgba(255,255,255,0.04); border-radius:8px; padding:10px 12px; }
+  .bil { font-family:'IBM Plex Mono',monospace; font-size:9px; color:#6D28D9; margin-bottom:3px; letter-spacing:1px; }
+  .biv { color:#CBD5E1; font-size:0.81rem; font-weight:600; line-height:1.4; font-family:'IBM Plex Mono',monospace; }
+
+  /* ALGO BOX — special to SMA */
+  .algo {
+    background: linear-gradient(135deg, #0F0A1E, #1A0F33);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 12px; padding: 18px; margin-bottom: 22px;
+  }
+  .ah { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .ai { width:32px; height:32px; background:rgba(167,139,250,0.2); border-radius:8px; display:flex;align-items:center;justify-content:center;font-size:14px; }
+  .at2 { color:#A78BFA; font-weight:800; font-size:0.88rem; }
+  .as2 { color:#7C3AED; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px; }
+  .ag { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .agi { background:rgba(255,255,255,0.04); border-radius:8px; padding:10px 12px; }
+  .agl { font-family:'IBM Plex Mono',monospace; font-size:9px; color:#7C3AED; margin-bottom:3px; letter-spacing:1px; }
+  .agv { color:#E9D5FF; font-size:0.81rem; line-height:1.4; }
+
+  /* UJI COBA */
+  .uji {
+    background:var(--gl); border:1.5px solid #6EE7B7;
+    border-radius:12px; padding:20px; margin-bottom:22px;
+  }
+  .uh { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .ui { width:36px; height:36px; background:var(--green); border-radius:9px; display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0; }
+  .ut { font-weight:900; font-size:0.93rem; color:#064E3B; }
+  .us { font-size:9px; color:#34D399; font-family:'IBM Plex Mono',monospace; letter-spacing:1px; }
+  .ck { list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .ck li { display:flex; align-items:flex-start; gap:10px; font-size:0.84rem; color:#064E3B; line-height:1.45; }
+  .cb3 { width:18px;height:18px;border:2px solid #34D399;border-radius:4px;flex-shrink:0;margin-top:1px; }
+
+  /* BONUS */
+  .bonus {
+    background:var(--yl); border:1.5px solid #FDE68A;
+    border-radius:12px; padding:18px; margin-bottom:22px;
+  }
+  .boh { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .boi { width:32px;height:32px;background:var(--yellow);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px; }
+  .bot { font-weight:900; font-size:0.9rem; color:#78350F; }
+  .bonus ul { padding-left:16px; }
+  .bonus li { font-size:0.82rem; color:#78350F; margin-bottom:5px; }
+
+  /* PYTHON SIDE-BY-SIDE */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 22px;
+  }
+  .cmp-panel { border-radius: 12px; overflow: hidden; }
+  .cmp-head {
+    padding: 9px 14px; font-family:'IBM Plex Mono',monospace;
+    font-size: 10px; letter-spacing: 1px; font-weight: 700;
+  }
+  .cmp-scratch .cmp-head { background: #1E1B4B; color: #A78BFA; }
+  .cmp-python .cmp-head { background: #064E3B; color: #34D399; }
+  .cmp-body {
+    background: var(--cb); padding: 16px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
+    line-height: 1.7; color: #CBD5E1; overflow-x: auto;
+  }
+
+  /* PROJECT */
+  .pbox {
+    background: linear-gradient(135deg, #0A0A14, #13132A, #0A1628);
+    border-radius: 14px; padding: 26px; margin-bottom: 22px;
+  }
+  .ph { display:flex;align-items:center;gap:14px;margin-bottom:18px; }
+  .pi { width:46px;height:46px;background:var(--p);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px; }
+  .pt { color:white;font-weight:900;font-size:1.05rem; }
+  .ps2 { color:#8B5CF6;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px; }
+  .pg { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+  .pgi { background:rgba(255,255,255,0.05);border-radius:9px;padding:12px 14px; }
+  .pgl { font-family:'IBM Plex Mono',monospace;font-size:9px;color:#374151;letter-spacing:1px;margin-bottom:4px; }
+  .pgv { color:#E2E8F0;font-size:0.82rem;font-weight:700; }
+
+  /* RUBRIK */
+  .rub { width:100%;border-collapse:collapse;font-size:0.81rem;margin-bottom:14px; }
+  .rub th { background:#0A0A14;color:#4B5563;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;padding:10px 12px;text-align:left; }
+  .rub td { padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top; }
+  .rub tr:last-child td { border-bottom:none; }
+  .s4{display:inline-block;padding:2px 9px;border-radius:5px;font-weight:800;font-size:11px;background:#DCFCE7;color:#166534;}
+  .s3{display:inline-block;padding:2px 9px;border-radius:5px;font-weight:800;font-size:11px;background:#EDE9FE;color:#4C1D95;}
+  .s2{display:inline-block;padding:2px 9px;border-radius:5px;font-weight:800;font-size:11px;background:#FEF9C3;color:#713F12;}
+  .s1{display:inline-block;padding:2px 9px;border-radius:5px;font-weight:800;font-size:11px;background:#FFE4E6;color:#9F1239;}
+
+  /* COMPLEXITY METER */
+  .meter { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .meter-label { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); min-width:120px; }
+  .meter-bar { flex:1; height:6px; background:#E5E7EB; border-radius:100px; overflow:hidden; }
+  .meter-fill { height:100%; border-radius:100px; }
+  .mf-1 { width:30%; background:linear-gradient(90deg,#34D399,#10B981); }
+  .mf-2 { width:50%; background:linear-gradient(90deg,#60A5FA,#3B82F6); }
+  .mf-3 { width:70%; background:linear-gradient(90deg,#A78BFA,#8B5CF6); }
+  .mf-4 { width:85%; background:linear-gradient(90deg,#F472B6,#EC4899); }
+  .mf-5 { width:100%; background:linear-gradient(90deg,#A78BFA,#EC4899,#06B6D4); }
+
+  @media(max-width:640px){
+    .pg,.bg,.ig,.compare,.ag{grid-template-columns:1fr;}
+    .cover-stats{flex-direction:column;align-items:center;}
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-aurora"></div>
+  <div class="cover-noise"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-content">
+    <div class="level-badge">
+      <span class="lb-icon">⚙️</span>
+      <span class="lb-text">LEVEL 3 · SEKOLAH MENENGAH ATAS</span>
+    </div>
+    <h1>Kurikulum<br><em>Scratch</em> SMA</h1>
+    <p class="cover-tagline">
+      Algoritma, rekursi, struktur data, dan simulasi.<br>
+      Pijakan terakhir sebelum terbang bersama Python.
+    </p>
+    <div class="cover-stats">
+      <div class="cs"><div class="cs-l">TOTAL MODUL</div><div class="cs-v">8 Modul</div></div>
+      <div class="cs"><div class="cs-l">TOTAL PERTEMUAN</div><div class="cs-v">~24 Pertemuan</div></div>
+      <div class="cs"><div class="cs-l">JENJANG</div><div class="cs-v">Kelas 10–12 SMA</div></div>
+      <div class="cs"><div class="cs-l">PRASYARAT</div><div class="cs-v">Scratch SMP Level 2</div></div>
+    </div>
+  </div>
+  <div class="path-bar">
+    <div class="pb done">✓ SD — Level 1</div>
+    <div style="color:#1F2937;font-size:18px;">→</div>
+    <div class="pb done">✓ SMP — Level 2</div>
+    <div style="color:#1F2937;font-size:18px;">→</div>
+    <div class="pb active">▶ SMA — Level 3</div>
+    <div style="color:#1F2937;font-size:18px;">→</div>
+    <div class="pb next">🐍 Python</div>
+  </div>
+</div>
+
+<!-- DOC -->
+<div class="doc">
+
+  <div class="div"><div class="div-l"></div><div class="div-chip">GAMBARAN UMUM</div><div class="div-l r"></div></div>
+
+  <div class="ov-card">
+    <h3>📋 Daftar Modul — SMA Level 3</h3>
+    <div class="toc-r"><span class="toc-m">MODUL 01</span><span class="toc-n">Algoritma, Pseudocode & Flowchart</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 02</span><span class="toc-n">Struktur Data — List sebagai Stack & Queue</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 03</span><span class="toc-n">Algoritma Sorting & Searching (Visual)</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 04</span><span class="toc-n">Rekursi & Fraktal</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 05</span><span class="toc-n">Simulasi & Pemodelan — Fisika & Agen</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 06</span><span class="toc-n">OOP Konseptual — Sprite sebagai Object</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 07</span><span class="toc-n">Scratch ↔ Python: Jembatan Transisi Penuh</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+    <div class="toc-r"><span class="toc-m">MODUL 08</span><span class="toc-n">Proyek Akhir SMA — Capstone & Transisi Python</span><span class="toc-d"></span><span class="toc-p">3 pertemuan</span></div>
+  </div>
+
+  <table class="ov-tbl">
+    <thead>
+      <tr><th>MODUL</th><th>KONSEP UTAMA</th><th>BLOK SCRATCH</th><th>PARALEL PYTHON</th><th>KOMPLEKSITAS</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>Algoritma, pseudocode, flowchart</td><td><span class="bt">semua blok</span></td><td>Logika umum</td><td>⬛⬜⬜⬜⬜</td></tr>
+      <tr><td><strong>02</strong></td><td>Stack (LIFO), Queue (FIFO)</td><td><span class="bt">list ops</span></td><td><code style="font-size:10px">list.append/pop</code></td><td>⬛⬛⬜⬜⬜</td></tr>
+      <tr><td><strong>03</strong></td><td>Bubble sort, linear search</td><td><span class="bt">repeat</span> <span class="bt">if</span> <span class="bt">list</span></td><td><code style="font-size:10px">sort(), in</code></td><td>⬛⬛⬛⬜⬜</td></tr>
+      <tr><td><strong>04</strong></td><td>Rekursi, base case, fraktal</td><td><span class="bt">define</span> <span class="bt">pen</span></td><td><code style="font-size:10px">def f(): f()</code></td><td>⬛⬛⬛⬛⬜</td></tr>
+      <tr><td><strong>05</strong></td><td>Simulasi fisika, agen, random</td><td><span class="bt">clone</span> <span class="bt">random</span></td><td><code style="font-size:10px">random, class</code></td><td>⬛⬛⬛⬛⬜</td></tr>
+      <tr><td><strong>06</strong></td><td>OOP: objek, properti, method</td><td><span class="bt">clone</span> <span class="bt">broadcast</span></td><td><code style="font-size:10px">class, __init__</code></td><td>⬛⬛⬛⬛⬜</td></tr>
+      <tr><td><strong>07</strong></td><td>Mapping Scratch → Python penuh</td><td>Semua blok</td><td>Semua sintaks dasar</td><td>⬛⬛⬛⬛⬛</td></tr>
+      <tr><td><strong>08</strong></td><td>Capstone + mini project Python</td><td>Semua + Python IDE</td><td>Full Python script</td><td>⬛⬛⬛⬛⬛</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== MODUL 01 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 01</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">01</div>
+      <div class="mht">
+        <h2>Algoritma, Pseudocode & Flowchart</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🗺️ FONDASI BERPIKIR</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu menulis pseudocode sebelum membuat kode Scratch maupun Python</li>
+          <li>Siswa mampu membuat flowchart dari algoritma dan mengimplementasikannya di Scratch</li>
+          <li>Siswa memahami konsep efisiensi: solusi O(n) vs O(n²) secara intuitif visual</li>
+        </ul>
+      </div>
+      <div class="algo">
+        <div class="ah"><div class="ai">🧠</div><div><div class="at2">Mengapa Algoritma Penting di Level SMA?</div><div class="as2">FONDASI COMPUTER SCIENCE</div></div></div>
+        <div class="ag">
+          <div class="agi"><div class="agl">DEFINISI</div><div class="agv">Langkah-langkah terbatas & terurut untuk menyelesaikan masalah tertentu</div></div>
+          <div class="agi"><div class="agl">PSEUDOCODE</div><div class="agv">Bahasa antara manusia & komputer — bebas sintaks, fokus logika</div></div>
+          <div class="agi"><div class="agl">FLOWCHART</div><div class="agv">Representasi visual algoritma: kotak = aksi, belah ketupat = keputusan</div></div>
+          <div class="agi"><div class="agl">EFISIENSI</div><div class="agv">Berapa langkah yang dibutuhkan? Makin sedikit makin baik</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>OUTPUT</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Apa itu Algoritma?</strong><br><small style="color:#6B7280">Analogi: resep masak, petunjuk IKEA, GPS</small></td><td>3 pseudocode sederhana</td><td>Tulis pseudocode: buat mie instan, cari nama di daftar hadir, urutkan nilai</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Flowchart → Scratch</strong><br><small style="color:#6B7280">Gambar dulu, baru kode</small></td><td>Flowchart + implementasi Scratch</td><td>Buat flowchart "tebak angka", lalu implementasikan di Scratch</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Efisiensi: Bandingkan Solusi</strong><br><small style="color:#6B7280">Hitung langkah, amati perbedaan waktu</small></td><td>Perbandingan 2 solusi berbeda</td><td>Cari angka terbesar: loop satu per satu vs sortir dulu — mana lebih cepat?</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH — PSEUDOCODE → SCRATCH: TEBAK ANGKA</div>
+      <div class="compare">
+        <div class="cmp-panel cmp-scratch">
+          <div class="cmp-head">📝 PSEUDOCODE (Bahasa manusia)</div>
+          <div class="cmp-body">
+<span style="color:#A78BFA">MULAI</span>
+  Pilih angka rahasia (1–100)
+  Simpan di variabel RAHASIA
+
+  ULANGI:
+    Minta user tebak angka
+    Simpan di TEBAKAN
+
+    JIKA tebakan = rahasia:
+      Tampilkan "BENAR! 🎉"
+      SELESAI
+    JIKA tebakan > rahasia:
+      Tampilkan "Terlalu besar ⬆️"
+    JIKA tebakan < rahasia:
+      Tampilkan "Terlalu kecil ⬇️"
+<span style="color:#A78BFA">SELESAI</span>
+          </div>
+        </div>
+        <div class="cmp-panel cmp-python">
+          <div class="cmp-head">🔧 SCRATCH PSEUDO-CODE</div>
+          <div class="cmp-body">
+<span class="ev">when green flag clicked</span>
+<span class="i1"><span class="vr">set [Rahasia] to</span> <span class="op">(pick random 1 to 100)</span></span>
+<span class="i1"><span class="ct">repeat until</span> <span class="sn">&lt;<span class="vr">(Tebakan)</span> <span class="op">= (Rahasia)</span>&gt;</span></span>
+<span class="i2"><span class="sd">ask "Tebak angka 1-100:" and wait</span></span>
+<span class="i2"><span class="vr">set [Tebakan] to (answer)</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(Tebakan)</span> <span class="op">&gt; (Rahasia)</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "Terlalu besar ⬆️"</span></span>
+<span class="i2"><span class="ct">else if</span> <span class="sn">&lt;<span class="vr">(Tebakan)</span> <span class="op">&lt; (Rahasia)</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i3"><span class="lk">say "Terlalu kecil ⬇️"</span></span>
+<span class="i1"><span class="lk">say "🎉 BENAR! Angkanya " + Rahasia</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 01</div><div class="us">VERIFIKASI LOGIKA ALGORITMA</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Pseudocode ditulis SEBELUM membuat Scratch — bukan setelah</li>
+          <li><div class="cb3"></div>Flowchart mencakup semua jalur: benar, terlalu besar, terlalu kecil</li>
+          <li><div class="cb3"></div>Program berhenti tepat saat tebakan benar (repeat until bekerja)</li>
+          <li><div class="cb3"></div>Siswa bisa menyebutkan jumlah langkah terburuk untuk mencari dari 100 angka</li>
+          <li><div class="cb3"></div>Siswa memahami: mengapa binary search lebih efisien dari linear search?</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Implementasikan "binary search" visual: selalu tebak angka tengah, kurangi setengah kemungkinan</li><li>Hitung & tampilkan berapa percobaan dibutuhkan — bandingkan strategi random vs binary</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 02 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 02</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">02</div>
+      <div class="mht">
+        <h2>Struktur Data — List sebagai Stack & Queue</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">📚 STRUKTUR DATA</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami perbedaan Stack (LIFO) dan Queue (FIFO) secara konseptual dan visual</li>
+          <li>Siswa mampu mengimplementasikan kedua struktur data ini menggunakan list di Scratch</li>
+          <li>Siswa dapat menyebutkan aplikasi nyata dari Stack dan Queue dalam kehidupan sehari-hari</li>
+        </ul>
+      </div>
+      <div class="bridge">
+        <div class="bh"><div class="bi">🐍</div><div><div class="bt2">Paralel ke Python</div><div class="bs">STRUKTUR DATA KLASIK</div></div></div>
+        <div class="bg">
+          <div class="bi2"><div class="bil">SCRATCH — STACK PUSH</div><div class="biv">insert [item] at 1 of [Stack]</div></div>
+          <div class="bi2"><div class="bil">PYTHON — STACK PUSH</div><div class="biv">stack.append(item)</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — STACK POP</div><div class="biv">delete 1 of [Stack]</div></div>
+          <div class="bi2"><div class="bil">PYTHON — STACK POP</div><div class="biv">stack.pop()</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — QUEUE ENQUEUE</div><div class="biv">add [item] to [Queue]</div></div>
+          <div class="bi2"><div class="bil">PYTHON — QUEUE ENQUEUE</div><div class="biv">from collections import deque</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Stack — LIFO (Last In First Out)</strong><br><small style="color:#6B7280">Analogi: tumpukan piring, tombol Undo</small></td><td><span class="bt">insert at 1</span> <span class="bt">delete 1</span> <span class="bt">item 1</span></td><td>Simulasi Undo/Redo: setiap aksi masuk stack, undo ambil dari atas</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Queue — FIFO (First In First Out)</strong><br><small style="color:#6B7280">Analogi: antrian kasir, print queue</small></td><td><span class="bt">add to list</span> <span class="bt">item 1</span> <span class="bt">delete 1</span></td><td>Simulasi antrian kasir: customer datang & dilayani berurutan</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Aplikasi: Maze Solver Sederhana</strong><br><small style="color:#6B7280">Stack untuk DFS — simpan jalur yang dikunjungi</small></td><td>Stack + broadcast + conditional</td><td>Sprite menjelajahi labirin, simpan jalur di stack, backtrack jika buntu</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH KODE — SIMULASI SISTEM UNDO/REDO</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">undo_system.scratch</span><span class="cl">STACK — LIFO</span></div>
+        <div class="cb2">
+<span class="cm">-- STACK: simpan setiap aksi yang dilakukan --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">delete all of [Undo_Stack]</span>
+<span class="i1">delete all of [Redo_Stack]</span>
+<span class="i1"><span class="mo">go to x: 0 y: 0</span></span>
+
+<span class="cm">-- Setiap bergerak: PUSH posisi ke stack --</span>
+<span class="ev">when [right arrow] key pressed</span>
+<span class="i1"><span class="cm">-- Simpan posisi SEBELUM bergerak (untuk undo) --</span></span>
+<span class="i1">insert (join (x position) (join "," (y position))) at 1 of [Undo_Stack]</span>
+<span class="i1"><span class="mo">change x by 20</span></span>
+
+<span class="cm">-- UNDO: ambil posisi dari puncak stack (LIFO) --</span>
+<span class="ev">when [Z] key pressed</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;(length of [Undo_Stack]) &gt; 0&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [PosLama] to (item 1 of [Undo_Stack])</span></span>
+<span class="i2">delete 1 of [Undo_Stack]  <span class="cm">← POP dari atas (LIFO)</span></span>
+<span class="i2"><span class="cm">-- Parsing: pisah X dan Y dari string "x,y" --</span></span>
+<span class="i2"><span class="mo">set x to (letter 1 to (position of "," in PosLama) of PosLama)</span></span>
+<span class="i2"><span class="lk">say "Undo! ↩️" for 0.5 secs</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="lk">say "Tidak ada yang bisa di-undo" for 1 secs</span></span>
+        </div>
+      </div>
+      <div class="st">CONTOH KODE — SIMULASI ANTRIAN KASIR (QUEUE)</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">antrian_kasir.scratch</span><span class="cl">QUEUE — FIFO</span></div>
+        <div class="cb2">
+<span class="cm">-- QUEUE: customer masuk dari belakang, dilayani dari depan --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">delete all of [Antrian]</span>
+<span class="i1"><span class="vr">set [Nomor_Antrian] to 0</span></span>
+
+<span class="cm">-- Tombol A: tambah customer baru (ENQUEUE) --</span>
+<span class="ev">when [A] key pressed</span>
+<span class="i1"><span class="vr">change [Nomor_Antrian] by 1</span></span>
+<span class="i1">add (join "Customer #" (Nomor_Antrian)) to [Antrian]  <span class="cm">← tambah di BELAKANG</span></span>
+<span class="i1"><span class="lk">say (join "Antri: " (join "Customer #" (Nomor_Antrian))) for 1 secs</span></span>
+
+<span class="cm">-- Tombol S: layani customer terdepan (DEQUEUE) --</span>
+<span class="ev">when [S] key pressed</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;(length of [Antrian]) &gt; 0&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [Dilayani] to (item 1 of [Antrian])</span></span>
+<span class="i2">delete 1 of [Antrian]  <span class="cm">← ambil dari DEPAN (FIFO)</span></span>
+<span class="i2"><span class="lk">say (join "Melayani: " (Dilayani)) for 2 secs</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="lk">say "Antrian kosong! 🎉" for 1 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 02</div><div class="us">VERIFIKASI PERILAKU STACK & QUEUE</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Stack (LIFO): item terakhir masuk adalah yang pertama keluar — dibuktikan dengan 5 operasi</li>
+          <li><div class="cb3"></div>Queue (FIFO): item pertama masuk adalah yang pertama keluar — dibuktikan dengan 5 operasi</li>
+          <li><div class="cb3"></div>Operasi pada stack/queue kosong tidak menyebabkan error (ada pengecekan)</li>
+          <li><div class="cb3"></div>Sistem Undo benar-benar mengembalikan posisi ke kondisi sebelumnya</li>
+          <li><div class="cb3"></div>Siswa bisa menyebutkan 3 aplikasi nyata Stack dan 3 aplikasi nyata Queue</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan: kapan kita memilih Stack vs Queue?</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Implementasikan "browser history": tombol Back = pop dari stack, tombol Forward = pop dari redo stack</li><li>Buat simulasi "call stack": visualisasikan fungsi yang memanggil fungsi lain dengan stack</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 03 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 03</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">03</div>
+      <div class="mht">
+        <h2>Algoritma Sorting & Searching (Visualisasi)</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🔢 ALGORITMA KLASIK</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami dan mampu mengimplementasikan Bubble Sort secara visual di Scratch</li>
+          <li>Siswa mampu mengimplementasikan Linear Search dan memahami cara kerjanya langkah per langkah</li>
+          <li>Siswa bisa membandingkan jumlah langkah tiap algoritma dan memahami implikasinya</li>
+        </ul>
+      </div>
+      <div class="bridge">
+        <div class="bh"><div class="bi">🐍</div><div><div class="bt2">Paralel ke Python</div><div class="bs">SORTING & SEARCHING</div></div></div>
+        <div class="bg">
+          <div class="bi2"><div class="bil">SCRATCH (manual bubble sort)</div><div class="biv">repeat, if, swap via temp variable</div></div>
+          <div class="bi2"><div class="bil">PYTHON (built-in)</div><div class="biv">sorted(list) atau list.sort()</div></div>
+          <div class="bi2"><div class="bil">SCRATCH (linear search)</div><div class="biv">repeat, if item = target, found!</div></div>
+          <div class="bi2"><div class="bil">PYTHON</div><div class="biv">if target in list: / list.index()</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Linear Search — Cari Satu per Satu</strong><br><small style="color:#6B7280">Periksa setiap elemen hingga ketemu</small></td><td><span class="bt">repeat</span> <span class="bt">if item = x</span></td><td>Visualisasikan: sprite berjalan ke setiap "kotak" dan memeriksa isinya</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Bubble Sort — Gelembung Naik</strong><br><small style="color:#6B7280">Bandingkan berdampingan, tukar jika perlu</small></td><td><span class="bt">repeat</span> bersarang + <span class="bt">swap via temp</span></td><td>Sorting visualizer: bilah warna bergerak dan bertukar tempat</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Hitung & Bandingkan Langkah</strong><br><small style="color:#6B7280">Counter langkah, visualisasi perbandingan</small></td><td><span class="bt">change [Counter]</span></td><td>Jalankan kedua algoritma pada data yang sama, bandingkan hitungan langkah</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH KODE — BUBBLE SORT VISUALIZER</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">bubble_sort_visual.scratch</span><span class="cl">SORTING ALGORITHM</span></div>
+        <div class="cb2">
+<span class="cm">-- Data tersimpan di list [Angka] --</span>
+<span class="cm">-- Contoh: [64, 34, 25, 12, 22, 11, 90] --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">delete all of [Angka]</span>
+<span class="i1">add 64 to [Angka]</span>
+<span class="i1">add 34 to [Angka]</span>
+<span class="i1">add 25 to [Angka]</span>
+<span class="i1">add 12 to [Angka]</span>
+<span class="i1">add 22 to [Angka]</span>
+<span class="i1"><span class="vr">set [Langkah] to 0</span></span>
+<span class="i1">Gambar Batang  <span class="cm">← custom blok: visualisasi awal</span></span>
+
+<span class="cm">-- BUBBLE SORT: nested loop --</span>
+<span class="ev">define [Bubble Sort]</span>
+<span class="i1"><span class="vr">set [i] to 1</span></span>
+<span class="i1"><span class="ct">repeat</span> <span class="op">((length of [Angka]) - 1)</span>  <span class="cm">← pass luar</span></span>
+<span class="i2"><span class="vr">set [j] to 1</span></span>
+<span class="i2"><span class="ct">repeat</span> <span class="op">((length of [Angka]) - (i))</span>  <span class="cm">← pass dalam</span></span>
+<span class="i3"><span class="vr">change [Langkah] by 1</span>  <span class="cm">← hitung perbandingan</span></span>
+<span class="i3"><span class="cm">-- Bandingkan elemen j dan j+1 --</span></span>
+<span class="i3"><span class="ct">if</span> <span class="sn">&lt;<span class="op">(item (j) of [Angka])</span> <span class="op">&gt;</span> <span class="op">(item ((j)+1) of [Angka])</span>&gt;</span> <span class="ct">then</span></span>
+<span style="padding-left:96px"><span class="cm">-- SWAP menggunakan variabel sementara --</span></span>
+<span style="padding-left:96px"><span class="vr">set [Temp] to (item (j) of [Angka])</span></span>
+<span style="padding-left:96px">replace item (j) of [Angka] with (item ((j)+1) of [Angka])</span>
+<span style="padding-left:96px">replace item ((j)+1) of [Angka] with (Temp)</span>
+<span style="padding-left:96px">Gambar Batang  <span class="cm">← update visual setelah swap</span></span>
+<span style="padding-left:96px"><span class="ct">wait 0.2 secs</span>  <span class="cm">← perlambat agar terlihat</span></span>
+<span class="i3"><span class="vr">change [j] by 1</span></span>
+<span class="i2"><span class="vr">change [i] by 1</span></span>
+<span class="i1"><span class="lk">say (join "Selesai! " (join (Langkah) " perbandingan dilakukan")) for 3 secs</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 03</div><div class="us">VERIFIKASI ALGORITMA SORTING & SEARCHING</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Bubble sort menghasilkan urutan yang benar (ascending) untuk data apapun</li>
+          <li><div class="cb3"></div>Visualisasi: batang benar-benar bergerak/bertukar posisi saat swap terjadi</li>
+          <li><div class="cb3"></div>Counter langkah akurat — bisa dihitung manual untuk data kecil</li>
+          <li><div class="cb3"></div>Linear search menemukan target DAN melaporkan di posisi mana</li>
+          <li><div class="cb3"></div>Linear search melaporkan "tidak ditemukan" jika target tidak ada di list</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan: untuk 5 elemen, bubble sort butuh berapa perbandingan maksimum?</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Implementasikan Selection Sort dan bandingkan jumlah langkahnya dengan Bubble Sort</li><li>Tambahkan fitur "step by step": tekan tombol untuk maju satu langkah setiap kali (manual stepping)</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 04 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 04</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">04</div>
+      <div class="mht">
+        <h2>Rekursi & Fraktal</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🌀 REKURSI</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami konsep rekursi: fungsi yang memanggil dirinya sendiri dengan input yang lebih kecil</li>
+          <li>Siswa mampu mengidentifikasi dan mendefinisikan base case (kasus dasar) yang menghentikan rekursi</li>
+          <li>Siswa dapat menggambar fraktal (pohon, Koch, Sierpinski) menggunakan rekursi di Scratch</li>
+        </ul>
+      </div>
+      <div class="bridge">
+        <div class="bh"><div class="bi">🐍</div><div><div class="bt2">Paralel ke Python — REKURSI</div><div class="bs">FUNGSI MEMANGGIL DIRINYA SENDIRI</div></div></div>
+        <div class="bg">
+          <div class="bi2"><div class="bil">SCRATCH — DEFINISI REKURSI</div><div class="biv">define [Gambar Pohon (n)]<br>... Gambar Pohon (n-1) ← panggil diri sendiri</div></div>
+          <div class="bi2"><div class="bil">PYTHON — REKURSI</div><div class="biv">def gambar_pohon(n):<br>    if n == 0: return<br>    gambar_pohon(n-1)</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — BASE CASE</div><div class="biv">if (n = 0) then stop</div></div>
+          <div class="bi2"><div class="bil">PYTHON — BASE CASE</div><div class="biv">if n == 0: return  # harus ada!</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Konsep Rekursi & Base Case</strong><br><small style="color:#6B7280">Analogi: cermin berhadapan, boneka matryoshka</small></td><td><span class="bt">define</span> dengan panggilan diri</td><td>Rekursi sederhana: hitung mundur, faktorial, fibonacci sederhana</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Fraktal Pohon (L-System)</strong><br><small style="color:#6B7280">Cabang membelah jadi dua, makin kecil</small></td><td><span class="bt">define</span> <span class="bt">pen</span> <span class="bt">turn</span> <span class="bt">move</span></td><td>Gambar pohon fraktal generatif dengan kedalaman 1 sampai 7</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Segitiga Sierpinski</strong><br><small style="color:#6B7280">Segitiga yang membagi diri jadi 3 segitiga</small></td><td><span class="bt">define</span> rekursif + <span class="bt">pen</span></td><td>Implementasi Sierpinski Triangle — amati pola fraktal yang muncul</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH KODE — POHON FRAKTAL REKURSIF</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">pohon_fraktal.scratch</span><span class="cl">REKURSI + PEN</span></div>
+        <div class="cb2">
+<span class="cm">-- REKURSI: custom blok memanggil dirinya sendiri --</span>
+<span class="fn">define [Gambar Cabang panjang: (L) kedalaman: (n)]</span>
+
+<span class="cm">-- BASE CASE: berhenti jika kedalaman = 0 --</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(n)</span> <span class="op">= 0</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="kw">stop [this script]</span>  <span class="cm">← WAJIB ada! Tanpa ini → infinite loop</span></span>
+
+<span class="cm">-- RECURSIVE CASE: gambar cabang, lalu percabangkan --</span>
+<span class="i1">pen down</span>
+<span class="i1"><span class="mo">move (L) steps</span>  <span class="cm">← gambar batang</span></span>
+
+<span class="cm">-- Cabang kiri --</span>
+<span class="i1"><span class="mo">turn -25 degrees</span></span>
+<span class="i1"><span class="fn">Gambar Cabang panjang:</span> <span class="op">((L) * 0.7)</span> <span class="fn">kedalaman:</span> <span class="op">((n) - 1)</span>  <span class="cm">← REKURSIF!</span></span>
+
+<span class="cm">-- Cabang kanan --</span>
+<span class="i1"><span class="mo">turn 50 degrees</span>  <span class="cm">← balik kanan dari posisi kiri (+25 +25)</span></span>
+<span class="i1"><span class="fn">Gambar Cabang panjang:</span> <span class="op">((L) * 0.7)</span> <span class="fn">kedalaman:</span> <span class="op">((n) - 1)</span>  <span class="cm">← REKURSIF!</span></span>
+
+<span class="cm">-- Kembali ke posisi semula --</span>
+<span class="i1"><span class="mo">turn -25 degrees</span></span>
+<span class="i1">pen up</span>
+<span class="i1"><span class="mo">move (-(L)) steps</span>  <span class="cm">← mundur ke posisi awal batang</span></span>
+
+<span class="cm">-- PANGGILAN PERTAMA (dari bendera hijau) --</span>
+<span class="ev">when green flag clicked</span>
+<span class="i1">erase all</span>
+<span class="i1"><span class="mo">go to x: 0 y: -150</span></span>
+<span class="i1"><span class="mo">point in direction 0</span>  <span class="cm">← menghadap ke atas</span></span>
+<span class="i1">set pen color to [coklat]</span>
+<span class="i1">set pen size to 3</span>
+<span class="i1"><span class="fn">Gambar Cabang panjang:</span> <span class="num">80</span> <span class="fn">kedalaman:</span> <span class="num">7</span>  <span class="cm">← depth 7 = pohon indah</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 04</div><div class="us">VERIFIKASI REKURSI & FRAKTAL</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Base case ada dan berfungsi — kedalaman 0 langsung berhenti</li>
+          <li><div class="cb3"></div>Tanpa base case → Scratch freeze atau error (siswa harus merasakan ini dulu!)</li>
+          <li><div class="cb3"></div>Kedalaman 1 = batang + 2 cabang pendek (terlihat benar)</li>
+          <li><div class="cb3"></div>Kedalaman 5+ = pohon yang memiliki struktur fraktal yang jelas</li>
+          <li><div class="cb3"></div>Parameter panjang berkurang di setiap level rekursi (× 0.7 atau sejenisnya)</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan urutan eksekusi rekursi secara verbal (DFS order)</li>
+          <li><div class="cb3"></div>Siswa tahu: kenapa rekursi tanpa base case disebut "infinite recursion"?</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Buat Segitiga Sierpinski: rekursi yang menggambar 3 segitiga dalam setiap segitiga</li><li>Modifikasi pohon fraktal: cabang kiri dan kanan memiliki sudut berbeda → hasilkan bentuk organik unik</li><li>Implementasikan fungsi faktorial dan Fibonacci secara rekursif dan bandingkan dengan iteratif</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 05 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 05</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">05</div>
+      <div class="mht">
+        <h2>Simulasi & Pemodelan — Fisika & Agen Otonom</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">⚛️ SIMULASI</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu memodelkan fenomena fisika (gravitasi, elastisitas, gesekan) dengan variabel dan loop</li>
+          <li>Siswa mampu membuat agen otonom sederhana yang berperilaku berdasarkan aturan lokal</li>
+          <li>Siswa memahami konsep emergence: pola kompleks muncul dari aturan sederhana</li>
+        </ul>
+      </div>
+      <div class="bridge">
+        <div class="bh"><div class="bi">🐍</div><div><div class="bt2">Paralel ke Python — SIMULASI</div><div class="bs">DARI SCRATCH KE PYGAME / MATPLOTLIB</div></div></div>
+        <div class="bg">
+          <div class="bi2"><div class="bil">SCRATCH — CLONE</div><div class="biv">create clone of [myself] → sprite baru lahir</div></div>
+          <div class="bi2"><div class="bil">PYTHON — OBJECT</div><div class="biv">partikel = Partikel(x, y, vx, vy)</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — RANDOM</div><div class="biv">pick random -5 to 5</div></div>
+          <div class="bi2"><div class="bil">PYTHON</div><div class="biv">random.uniform(-5, 5)</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Simulasi Fisika: Pantulan & Gravitasi</strong><br><small style="color:#6B7280">Kecepatan, akselerasi, elastisitas (restitusi)</small></td><td><span class="bt">change y by Vy</span> <span class="bt">Vy × 0.9</span></td><td>Bola yang jatuh, memantul dengan energi yang berkurang setiap pantulan</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Kloning & Multi-Partikel</strong><br><small style="color:#6B7280">Satu sprite menghasilkan banyak klon dengan sifat berbeda</small></td><td><span class="bt">create clone</span> <span class="bt">when I start as clone</span></td><td>Efek kembang api: 50 partikel meledak ke segala arah</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Agen Otonom: Flocking / Boids</strong><br><small style="color:#6B7280">Separation, Alignment, Cohesion → perilaku kawanan</small></td><td>Kloning + trigonometri sederhana</td><td>Simulasi burung terbang bergerombol (boids algorithm sederhana)</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH KODE — SIMULASI KEMBANG API (KLONING)</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">kembang_api.scratch</span><span class="cl">CLONE + FISIKA</span></div>
+        <div class="cb2">
+<span class="cm">-- SPRITE INDUK: saat diklik, spawn banyak partikel --</span>
+<span class="ev">when this sprite clicked</span>
+<span class="i1"><span class="ct">repeat 40</span>  <span class="cm">← buat 40 partikel</span></span>
+<span class="i2">create clone of [myself]</span>
+
+<span class="cm">-- SETIAP KLON: hidup dengan fisika sendiri --</span>
+<span class="ev">when I start as a clone</span>
+<span class="i1"><span class="cm">-- Kecepatan awal acak ke segala arah --</span></span>
+<span class="i1"><span class="vr">set [Vx] to (pick random -8 to 8)</span></span>
+<span class="i1"><span class="vr">set [Vy] to (pick random 2 to 10)</span>  <span class="cm">← meluncur ke atas dulu</span></span>
+<span class="i1"><span class="lk">set color effect to (pick random 0 to 200)</span></span>
+<span class="i1"><span class="lk">set size to (pick random 30 to 80)%</span></span>
+<span class="i1"><span class="lk">show</span></span>
+
+<span class="i1"><span class="ct">repeat 60</span>  <span class="cm">← partikel hidup 60 frame</span></span>
+<span class="i2"><span class="mo">change x by (Vx)</span></span>
+<span class="i2"><span class="mo">change y by (Vy)</span></span>
+<span class="i2"><span class="vr">change [Vy] by -0.5</span>  <span class="cm">← gravitasi perlambat kecepatan Y</span></span>
+<span class="i2"><span class="vr">change [Vx] by (Vx * -0.05)</span>  <span class="cm">← gesekan udara</span></span>
+<span class="i2"><span class="lk">change ghost effect by 2</span>  <span class="cm">← makin lama makin transparan</span></span>
+
+<span class="i1">delete this clone  <span class="cm">← partikel mati setelah 60 frame</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 05</div><div class="us">VERIFIKASI SIMULASI FISIKA</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Bola jatuh dan memantul dengan ketinggian yang berkurang setiap kali (bukan memantul selamanya)</li>
+          <li><div class="cb3"></div>Setiap klon memiliki kecepatan dan warna yang berbeda (random bekerja)</li>
+          <li><div class="cb3"></div>Klon dihapus setelah selesai — tidak ada klon zombie yang menumpuk</li>
+          <li><div class="cb3"></div>Efek gravitasi terlihat jelas: partikel melambat ke atas lalu jatuh ke bawah</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan: apa yang berubah jika nilai gravitasi diubah dari -0.5 ke -2?</li>
+          <li><div class="cb3"></div>Siswa memahami konsep "emergence": aturan sederhana → perilaku kompleks</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Buat simulasi Game of Life (cellular automata): sel hidup/mati berdasarkan jumlah tetangga</li><li>Simulasikan orbit planet sederhana: benda berputar mengikuti gravitasi benda yang lebih besar</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 06 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 06</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">06</div>
+      <div class="mht">
+        <h2>OOP Konseptual — Sprite sebagai Object</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🧬 OOP</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa memahami konsep OOP: objek memiliki properti (data) dan method (perilaku)</li>
+          <li>Siswa bisa memetakan: Sprite = Class, Klon = Instance, Variabel Klon = Attribute, Custom Blok = Method</li>
+          <li>Siswa siap memahami sintaks <code>class</code> di Python setelah transisi</li>
+        </ul>
+      </div>
+      <div class="bridge">
+        <div class="bh"><div class="bi">🐍</div><div><div class="bt2">Paralel ke Python — OOP</div><div class="bs">KONSEP TERPENTING SEBELUM PYTHON</div></div></div>
+        <div class="bg">
+          <div class="bi2"><div class="bil">SCRATCH — "CLASS"</div><div class="biv">Sprite (template untuk semua klon)</div></div>
+          <div class="bi2"><div class="bil">PYTHON — CLASS</div><div class="biv">class Musuh:</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — "INSTANCE"</div><div class="biv">create clone of [Musuh]</div></div>
+          <div class="bi2"><div class="bil">PYTHON — INSTANCE</div><div class="biv">musuh1 = Musuh()</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — "ATTRIBUTE"</div><div class="biv">variabel per-klon: HP, Speed, Level</div></div>
+          <div class="bi2"><div class="bil">PYTHON — ATTRIBUTE</div><div class="biv">self.hp = 100 dalam __init__</div></div>
+          <div class="bi2"><div class="bil">SCRATCH — "METHOD"</div><div class="biv">Custom Blok [Serang] [Mati] [Bergerak]</div></div>
+          <div class="bi2"><div class="bil">PYTHON — METHOD</div><div class="biv">def serang(self): def mati(self):</div></div>
+        </div>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>BLOK YANG DIGUNAKAN</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Sprite = Class, Klon = Instance</strong><br><small style="color:#6B7280">Satu template, banyak objek</small></td><td><span class="bt">create clone</span> <span class="bt">when I start as clone</span></td><td>Buat sprite Musuh: klon banyak musuh, tiap musuh punya HP berbeda</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Attribute Per-Instance & Method</strong><br><small style="color:#6B7280">Setiap klon punya "state" sendiri</small></td><td>Variable per-clone + custom blocks</td><td>Musuh punya HP, Speed, Level — custom blok Serang(), TerimaSerangan()</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Inheritance Konseptual</strong><br><small style="color:#6B7280">Musuh Biasa → Musuh Bos (properti tambahan)</small></td><td>Multiple sprites + shared behavior</td><td>Dua jenis musuh berbeda yang mewarisi perilaku dasar yang sama</td></tr>
+        </tbody>
+      </table>
+      <div class="st">CONTOH KODE — MUSUH SEBAGAI OBJECT (KLON)</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">enemy_oop.scratch</span><span class="cl">OOP KONSEPTUAL</span></div>
+        <div class="cb2">
+<span class="cm">-- SPRITE MUSUH = "Class" --</span>
+<span class="cm">-- Custom blok = "Methods" --</span>
+<span class="fn">define [Inisialisasi (level_input)]</span>  <span class="cm">← seperti __init__(self, level)</span>
+<span class="i1"><span class="vr">set [HP] to ((level_input) * 30)</span>  <span class="cm">← HP = 30 × level</span></span>
+<span class="i1"><span class="vr">set [Speed] to ((level_input) * 1.5)</span></span>
+<span class="i1"><span class="vr">set [Level] to (level_input)</span></span>
+<span class="i1"><span class="lk">set size to (50 + (level_input * 10))%</span></span>
+<span class="i1"><span class="lk">set color effect to ((level_input) * 15)</span></span>
+
+<span class="fn">define [Bergerak]</span>  <span class="cm">← method: perilaku musuh</span>
+<span class="i1"><span class="mo">move (Speed) steps</span></span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;touching edge?&gt;</span> <span class="ct">then</span> <span class="mo">turn (pick random 120 to 240) degrees</span></span>
+
+<span class="fn">define [Terima Damage (damage)]</span>  <span class="cm">← method: kurangi HP</span>
+<span class="i1"><span class="vr">change [HP] by (-(damage))</span></span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(HP)</span> <span class="op">≤ 0</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="fn">Mati</span>  <span class="cm">← panggil method lain</span></span>
+
+<span class="fn">define [Mati]</span>  <span class="cm">← method: animasi kematian + hapus</span>
+<span class="i1"><span class="sd">play sound [Explosion]</span></span>
+<span class="i1"><span class="ct">repeat 5</span></span>
+<span class="i2"><span class="lk">change size by -10</span></span>
+<span class="i1">delete this clone</span>
+
+<span class="cm">-- SPAWN: buat klon dengan level berbeda --</span>
+<span class="ev">when I receive [mulai_game]</span>
+<span class="i1"><span class="ct">repeat 5</span>  <span class="cm">← spawn 5 musuh</span></span>
+<span class="i2"><span class="mo">go to x: (pick random -200 to 200) y: (pick random -150 to 150)</span></span>
+<span class="i2">create clone of [myself]
+
+<span class="ev">when I start as a clone</span>  <span class="cm">← setiap instance inisialisasi sendiri</span></span>
+<span class="i1"><span class="fn">Inisialisasi</span> <span class="op">(pick random 1 to 5)</span>  <span class="cm">← level acak 1-5</span></span>
+<span class="i1"><span class="lk">show</span></span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2"><span class="fn">Bergerak</span>  <span class="cm">← panggil method setiap frame</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 06</div><div class="us">VERIFIKASI OOP KONSEPTUAL</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Setiap klon memiliki HP, Speed, Level yang BERBEDA (bukan semua sama)</li>
+          <li><div class="cb3"></div>Musuh level tinggi: lebih besar, lebih cepat, HP lebih banyak</li>
+          <li><div class="cb3"></div>Method Terima Damage bekerja per-klon (satu klon terkena tidak mempengaruhi yang lain)</li>
+          <li><div class="cb3"></div>Klon mati dan terhapus secara independen</li>
+          <li><div class="cb3"></div>Siswa bisa mengisi tabel pemetaan: Scratch ↔ Python OOP untuk semua 4 konsep</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan: apa bedanya Class dan Instance dengan analogi nyata?</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Buat sprite "Bos" yang merupakan musuh level 10 dengan serangan khusus (inheritance)</li><li>Implementasikan sistem loot: saat musuh mati, drop item acak dari list kemungkinan loot</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 07 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 07</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh">
+      <div class="mn">07</div>
+      <div class="mht">
+        <h2>Scratch ↔ Python: Jembatan Transisi Penuh</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🐍 TRANSISI</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu memetakan SETIAP konsep Scratch yang sudah dipelajari ke sintaks Python yang setara</li>
+          <li>Siswa mampu menulis ulang program Scratch sederhana menjadi script Python yang berfungsi</li>
+          <li>Siswa merasa siap dan percaya diri untuk belajar Python secara penuh</li>
+        </ul>
+      </div>
+      <div class="st">RINCIAN MATERI PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>TOPIK</th><th>AKTIVITAS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Tabel Pemetaan Lengkap</strong><br><small style="color:#6B7280">Variabel, kondisi, loop, fungsi, list di Python</small></td><td>Isi tabel pemetaan 30+ konsep Scratch → Python, buat "cheat sheet" pribadi</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Terjemahkan Proyek Scratch ke Python</strong><br><small style="color:#6B7280">Kalkulator dari Modul 04 SMP → Python script</small></td><td">Tulis ulang kalkulator Scratch ke Python di IDE (Thonny / IDLE), jalankan di terminal</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Explore Python-Only Features</strong><br><small style="color:#6B7280">Hal yang tidak bisa di Scratch tapi bisa di Python</small></td><td>File I/O, string manipulation, multiple return values, list comprehension</td></tr>
+        </tbody>
+      </table>
+      <div class="st">TABEL PEMETAAN LENGKAP — SCRATCH → PYTHON</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">mapping_complete.py</span><span class="cl">SCRATCH → PYTHON REFERENCE</span></div>
+        <div class="cb2">
+<span class="cm"># ============================================</span>
+<span class="cm"># VARIABEL</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: set [Skor] to 0</span>
+<span class="py">skor = 0</span>
+<span class="cm"># Scratch: change [Skor] by 10</span>
+<span class="py">skor += 10</span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># INPUT / OUTPUT</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: say "Halo" for 2 secs</span>
+<span class="py">print("Halo")</span>
+<span class="cm"># Scratch: ask "Nama?" and wait → answer</span>
+<span class="py">nama = <span class="fn">input</span>(<span class="str">"Nama? "</span>)</span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># KONDISI</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: if <kondisi> then / else</span>
+<span class="kw">if</span> skor <span class="op">&gt;</span> <span class="num">100</span>:
+    <span class="py">    print(<span class="str">"Menang!"</span>)</span>
+<span class="kw">elif</span> skor <span class="op">&gt;</span> <span class="num">50</span>:
+    <span class="py">    print(<span class="str">"Bagus!"</span>)</span>
+<span class="kw">else</span>:
+    <span class="py">    print(<span class="str">"Coba lagi"</span>)</span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># LOOP</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: repeat 10</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+<span class="py">    print(i)</span>
+<span class="cm"># Scratch: repeat until <kondisi></span>
+<span class="kw">while not</span> kondisi:
+<span class="py">    ...</span>
+<span class="cm"># Scratch: forever</span>
+<span class="kw">while True</span>:
+<span class="py">    ...</span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># LIST</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: add "apel" to [Buah]</span>
+<span class="py">buah = []</span>
+<span class="py">buah.<span class="fn">append</span>(<span class="str">"apel"</span>)</span>
+<span class="cm"># Scratch: item 1 of [Buah]  ← index dari 1</span>
+<span class="py">buah[<span class="num">0</span>]  <span class="cm"># Python index dari 0!</span></span>
+<span class="cm"># Scratch: length of [Buah]</span>
+<span class="py"><span class="fn">len</span>(buah)</span>
+<span class="cm"># Scratch: [Buah] contains "apel"</span>
+<span class="py"><span class="str">"apel"</span> <span class="kw">in</span> buah</span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># FUNGSI</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: define [Gambar Poligon sisi: (n)]</span>
+<span class="kw">def</span> <span class="fn">gambar_poligon</span>(n_sisi, panjang):
+<span class="py">    sudut = <span class="num">360</span> / n_sisi</span>
+<span class="py">    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n_sisi):</span>
+<span class="py">        maju(panjang)</span>
+<span class="py">        belok(sudut)</span>
+
+<span class="cm"># Panggil fungsi:</span>
+<span class="py"><span class="fn">gambar_poligon</span>(<span class="num">6</span>, <span class="num">80</span>)  <span class="cm"># segi enam</span></span>
+
+<span class="cm"># ============================================</span>
+<span class="cm"># OOP — KONSEP BARU PYTHON</span>
+<span class="cm"># ============================================</span>
+<span class="cm"># Scratch: Sprite Musuh + klon = Class + instance</span>
+<span class="kw">class</span> <span class="fn">Musuh</span>:
+<span class="py">    <span class="kw">def</span> <span class="fn">__init__</span>(self, level):  <span class="cm"># = define [Inisialisasi (level)]</span></span>
+<span class="py">        self.hp = level * <span class="num">30</span></span>
+<span class="py">        self.speed = level * <span class="num">1.5</span></span>
+<span class="py">    <span class="kw">def</span> <span class="fn">terima_damage</span>(self, damage):  <span class="cm"># = custom blok</span></span>
+<span class="py">        self.hp -= damage</span>
+<span class="py">        <span class="kw">if</span> self.hp &lt;= <span class="num">0</span>:</span>
+<span class="py">            self.<span class="fn">mati</span>()</span>
+
+<span class="cm"># Buat instance (= create clone)</span>
+<span class="py">musuh1 = <span class="fn">Musuh</span>(<span class="num">3</span>)  <span class="cm"># level 3</span></span>
+<span class="py">musuh2 = <span class="fn">Musuh</span>(<span class="num">5</span>)  <span class="cm"># level 5, instance berbeda</span></span>
+        </div>
+      </div>
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba — Modul 07</div><div class="us">VERIFIKASI KESIAPAN TRANSISI KE PYTHON</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div>Siswa berhasil menjalankan script Python pertama di IDE (print "Halo Dunia")</li>
+          <li><div class="cb3"></div>Program kalkulator berjalan di Python tanpa error</li>
+          <li><div class="cb3"></div>Siswa bisa menjelaskan perbedaan index list: Scratch mulai dari 1, Python dari 0</li>
+          <li><div class="cb3"></div>Tabel pemetaan 30+ konsep terisi lengkap dan akurat</li>
+          <li><div class="cb3"></div>Siswa bisa menulis class Python sederhana dengan __init__ dan 1 method</li>
+          <li><div class="cb3"></div>Siswa menyebutkan 3 hal yang bisa Python tapi tidak bisa Scratch</li>
+        </ul>
+      </div>
+      <div class="bonus"><div class="boh"><div class="boi">⭐</div><div class="bot">Tantangan Bonus</div></div><ul><li>Terjemahkan bubble sort dari Scratch ke Python dan uji dengan list berisi 10 angka acak</li><li>Buat rekursi faktorial di Python dan bandingkan kecepatan vs versi loop iteratif</li></ul></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODUL 08 ==================== -->
+  <div class="div"><div class="div-l"></div><div class="div-chip">MODUL 08 — CAPSTONE FINAL</div><div class="div-l r"></div></div>
+
+  <div class="mod">
+    <div class="mh" style="background: linear-gradient(135deg, #0A0A14, #1A0F33, #0A1A28);">
+      <div class="mn" style="background:rgba(139,92,246,0.3)">08</div>
+      <div class="mht">
+        <h2>Proyek Akhir SMA — Capstone & Transisi Python</h2>
+        <div class="mt">
+          <span class="mtag">3 PERTEMUAN</span>
+          <span class="mtag">⏱ 3 × 60 MENIT</span>
+          <span class="mtag">🏆 CAPSTONE FINAL</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="obj">
+        <div class="obj-l">TUJUAN PEMBELAJARAN</div>
+        <ul>
+          <li>Siswa mampu merancang dan membangun proyek orisinal yang menerapkan algoritma dari level SMA</li>
+          <li>Siswa mampu mendokumentasikan proyek secara teknis (GDD, flowchart, pseudocode)</li>
+          <li>Siswa mampu mempresentasikan proyek secara profesional dan menghubungkannya ke Python</li>
+        </ul>
+      </div>
+
+      <div class="pbox">
+        <div class="ph">
+          <div class="pi">🎯</div>
+          <div>
+            <div class="pt">Pilihan Topik Proyek Akhir SMA</div>
+            <div class="ps2">SISWA MEMILIH SALAH SATU DARI 4 OPSI</div>
+          </div>
+        </div>
+        <div class="pg">
+          <div class="pgi"><div class="pgl">OPSI A — ALGORITMA</div><div class="pgv">Sorting Visualizer interaktif: user upload data, pilih algoritma (bubble/selection/insertion), lihat animasi + hitung langkah</div></div>
+          <div class="pgi"><div class="pgl">OPSI B — SIMULASI</div><div class="pgv">Simulasi ilmiah: populasi predator-mangsa (Lotka-Volterra), epidemi SIR, atau orbit gravitasi multi-benda</div></div>
+          <div class="pgi"><div class="pgl">OPSI C — AI SEDERHANA</div><div class="pgv">Game dengan musuh ber-AI: pathfinding sederhana (greedy), state machine (patrol/chase/attack), difficulty scaling</div></div>
+          <div class="pgi"><div class="pgl">OPSI D — APLIKASI EDUKATIF</div><div class="pgv">Aplikasi belajar interaktif: kuis adaptif (soal lebih susah jika benar), progress tracking, leaderboard via list</div></div>
+        </div>
+      </div>
+
+      <div class="st">RINCIAN PER PERTEMUAN</div>
+      <table class="tt">
+        <thead><tr><th>PERTEMUAN</th><th>FOKUS</th><th>DELIVERABLE</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pb2">P-1</span></td><td><strong>Perencanaan & Desain</strong><br>Pilih topik, tulis GDD (Game/Project Design Document), buat flowchart algoritma utama, pseudocode semua fungsi, tentukan list & variabel yang diperlukan</td><td>GDD tertulis + flowchart + pseudocode</td></tr>
+          <tr><td><span class="pb2">P-2</span></td><td><strong>Implementasi Inti</strong><br>Kode algoritma utama (sorting / simulasi / AI / kuis), sistem data (list + variabel), visualisasi & UI, uji semua jalur kode</td><td>Proyek berjalan fungsional</td></tr>
+          <tr><td><span class="pb2">P-3</span></td><td><strong>Polish, Python Preview & Presentasi</strong><br>Finalisasi proyek, tulis 20–30 baris Python yang setara dengan bagian utama proyek, buat slide presentasi 5 menit, presentasi + demo + Q&A</td><td>Proyek selesai + Python snippet + Presentasi</td></tr>
+        </tbody>
+      </table>
+
+      <div class="st">CONTOH KODE — CAPSTONE OPSI C: MUSUH DENGAN AI PATHFINDING</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">enemy_ai.scratch</span><span class="cl">STATE MACHINE + PATHFINDING GREEDY</span></div>
+        <div class="cb2">
+<span class="cm">-- MUSUH AI: State Machine (Patrol → Chase → Attack) --</span>
+<span class="ev">define [Update AI State]</span>
+<span class="i1"><span class="vr">set [JarakKePemain] to</span> <span class="op">(distance to [Pemain])</span></span>
+
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(JarakKePemain)</span> <span class="op">&lt; 30</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [State] to "ATTACK"</span></span>
+<span class="i1"><span class="ct">else if</span> <span class="sn">&lt;<span class="vr">(JarakKePemain)</span> <span class="op">&lt; 120</span>&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="vr">set [State] to "CHASE"</span></span>
+<span class="i1"><span class="ct">else</span></span>
+<span class="i2"><span class="vr">set [State] to "PATROL"</span></span>
+
+<span class="ev">define [Eksekusi State]</span>
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(State)</span> = "PATROL"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="cm">-- Berpatroli: bergerak ke waypoint acak --</span></span>
+<span class="i2"><span class="mo">move (Speed) steps</span></span>
+<span class="i2"><span class="ct">if</span> <span class="sn">&lt;touching edge?&gt;</span> <span class="ct">then</span> <span class="mo">turn (pick random 100 to 260) degrees</span></span>
+
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(State)</span> = "CHASE"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="cm">-- Greedy pathfinding: selalu menuju pemain --</span></span>
+<span class="i2"><span class="mo">point towards [Pemain]</span></span>
+<span class="i2"><span class="mo">move (Speed * 1.5) steps</span>  <span class="cm">← lebih cepat saat mengejar</span></span>
+
+<span class="i1"><span class="ct">if</span> <span class="sn">&lt;<span class="vr">(State)</span> = "ATTACK"&gt;</span> <span class="ct">then</span></span>
+<span class="i2"><span class="sd">play sound [Attack]</span></span>
+<span class="i2">broadcast [pemain_terkena]</span>
+<span class="i2"><span class="ct">wait 1 secs</span>  <span class="cm">← cooldown serang</span></span>
+
+<span class="cm">-- Loop utama musuh --</span>
+<span class="ev">when I start as a clone</span>
+<span class="i1"><span class="fn">Inisialisasi</span> <span class="op">(pick random 1 to 5)</span></span>
+<span class="i1"><span class="ct">forever</span></span>
+<span class="i2"><span class="fn">Update AI State</span></span>
+<span class="i2"><span class="fn">Eksekusi State</span></span>
+<span class="i2"><span class="ct">wait 0.05 secs</span>  <span class="cm">← 20 FPS AI update</span></span>
+        </div>
+      </div>
+
+      <div class="st">PYTHON SNIPPET — SETARA DARI SCRATCH KE PYTHON</div>
+      <div class="cw">
+        <div class="ct2"><div class="ds"><div class="d dr"></div><div class="d dy"></div><div class="d dg"></div></div><span class="cf">enemy_ai_python.py</span><span class="cl">PYTHON EQUIVALENT</span></div>
+        <div class="cb2">
+<span class="cm"># Terjemahan state machine musuh ke Python</span>
+<span class="kw">import</span> math
+<span class="kw">import</span> random
+
+<span class="kw">class</span> <span class="fn">Musuh</span>:
+<span class="py">    <span class="kw">def</span> <span class="fn">__init__</span>(self, x, y, level):</span>
+<span class="py">        self.x, self.y = x, y</span>
+<span class="py">        self.hp = level * <span class="num">30</span></span>
+<span class="py">        self.speed = level * <span class="num">1.5</span></span>
+<span class="py">        self.state = <span class="str">"PATROL"</span></span>
+
+<span class="py">    <span class="kw">def</span> <span class="fn">jarak_ke</span>(self, target_x, target_y):</span>
+<span class="py">        dx = target_x - self.x</span>
+<span class="py">        dy = target_y - self.y</span>
+<span class="py">        <span class="kw">return</span> math.<span class="fn">sqrt</span>(dx**<span class="num">2</span> + dy**<span class="num">2</span>)</span>
+
+<span class="py">    <span class="kw">def</span> <span class="fn">update_state</span>(self, pemain_x, pemain_y):</span>
+<span class="py">        jarak = self.<span class="fn">jarak_ke</span>(pemain_x, pemain_y)</span>
+<span class="py">        <span class="kw">if</span> jarak &lt; <span class="num">30</span>: self.state = <span class="str">"ATTACK"</span></span>
+<span class="py">        <span class="kw">elif</span> jarak &lt; <span class="num">120</span>: self.state = <span class="str">"CHASE"</span></span>
+<span class="py">        <span class="kw">else</span>: self.state = <span class="str">"PATROL"</span></span>
+
+<span class="py">    <span class="kw">def</span> <span class="fn">update</span>(self, pemain_x, pemain_y):</span>
+<span class="py">        self.<span class="fn">update_state</span>(pemain_x, pemain_y)</span>
+<span class="py">        <span class="kw">if</span> self.state == <span class="str">"CHASE"</span>:</span>
+<span class="py">            dx = pemain_x - self.x</span>
+<span class="py">            dy = pemain_y - self.y</span>
+<span class="py">            dist = self.<span class="fn">jarak_ke</span>(pemain_x, pemain_y)</span>
+<span class="py">            <span class="kw">if</span> dist &gt; <span class="num">0</span>:</span>
+<span class="py">                self.x += (dx/dist) * self.speed</span>
+<span class="py">                self.y += (dy/dist) * self.speed</span>
+
+<span class="cm"># Buat 5 musuh (setara "create clone" × 5 di Scratch)</span>
+<span class="py">musuh_list = [<span class="fn">Musuh</span>(random.<span class="fn">randint</span>(-<span class="num">200</span>,<span class="num">200</span>), random.<span class="fn">randint</span>(-<span class="num">150</span>,<span class="num">150</span>), random.<span class="fn">randint</span>(<span class="num">1</span>,<span class="num">5</span>)) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)]</span>
+        </div>
+      </div>
+
+      <div class="uji">
+        <div class="uh"><div class="ui">✅</div><div><div class="ut">Checklist Uji Coba Final — Capstone SMA</div><div class="us">SEMUA POIN WAJIB SEBELUM PRESENTASI</div></div></div>
+        <ul class="ck">
+          <li><div class="cb3"></div><strong>GDD:</strong> Dokumen desain mencakup tujuan, algoritma utama, struktur data, dan flowchart</li>
+          <li><div class="cb3"></div><strong>Algoritma:</strong> Minimal satu algoritma dari level SMA diimplementasikan dengan benar (sorting/rekursi/AI/simulasi)</li>
+          <li><div class="cb3"></div><strong>Custom Blok:</strong> Minimal 4 custom blok dengan parameter — kode terstruktur</li>
+          <li><div class="cb3"></div><strong>Struktur Data:</strong> Minimal satu list digunakan secara bermakna (bukan sekedar dekorasi)</li>
+          <li><div class="cb3"></div><strong>Python Snippet:</strong> 20–30 baris Python yang setara dengan bagian inti proyek berjalan tanpa error</li>
+          <li><div class="cb3"></div><strong>Restart:</strong> Bendera hijau → semua reset sempurna</li>
+          <li><div class="cb3"></div><strong>Presentasi:</strong> Siswa menjelaskan: masalah apa yang diselesaikan, algoritma apa yang dipakai, dan apa yang ingin mereka buat selanjutnya di Python</li>
+          <li><div class="cb3"></div><strong>Refleksi:</strong> Siswa bisa menyebutkan satu konsep yang paling sulit dan bagaimana mereka memecahkannya</li>
+        </ul>
+      </div>
+
+      <div class="st">RUBRIK PENILAIAN PROYEK AKHIR SMA</div>
+      <table class="rub">
+        <thead>
+          <tr><th style="width:22%">ASPEK</th><th style="width:19%">SKOR 4</th><th style="width:19%">SKOR 3</th><th style="width:19%">SKOR 2</th><th style="width:19%">SKOR 1</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Kompleksitas Algoritma</strong></td>
+            <td><span class="s4">4</span> Algoritma SMA diimplementasikan dengan sempurna + optimasi</td>
+            <td><span class="s3">3</span> Algoritma bekerja benar</td>
+            <td><span class="s2">2</span> Algoritma parsial / ada bug logika</td>
+            <td><span class="s1">1</span> Tidak ada algoritma SMA yang nyata</td>
+          </tr>
+          <tr>
+            <td><strong>Kualitas Kode & Arsitektur</strong></td>
+            <td><span class="s4">4</span> OOP / fungsi terstruktur, komentar lengkap, DRY</td>
+            <td><span class="s3">3</span> Struktur baik, beberapa custom blok</td>
+            <td><span class="s2">2</span> Kode bekerja tapi tidak terstruktur</td>
+            <td><span class="s1">1</span> Kode berantakan</td>
+          </tr>
+          <tr>
+            <td><strong>Koneksi ke Python</strong></td>
+            <td><span class="s4">4</span> Python snippet berjalan + menjelaskan perbedaan & keunggulan Python</td>
+            <td><span class="s3">3</span> Python snippet berjalan dengan benar</td>
+            <td><span class="s2">2</span> Python snippet ada tapi ada error</td>
+            <td><span class="s1">1</span> Tidak ada Python snippet</td>
+          </tr>
+          <tr>
+            <td><strong>Presentasi & Komunikasi Teknis</strong></td>
+            <td><span class="s4">4</span> Menjelaskan algoritma + demo + menjawab pertanyaan teknis dengan percaya diri</td>
+            <td><span class="s3">3</span> Penjelasan jelas + demo berjalan</td>
+            <td><span class="s2">2</span> Demo berjalan, penjelasan terbatas</td>
+            <td><span class="s1">1</span> Tidak bisa menjelaskan</td>
+          </tr>
+          <tr>
+            <td><strong>Kreativitas & Orisinalitas</strong></td>
+            <td><span class="s4">4</span> Ide orisinal, memecahkan masalah nyata yang relevan</td>
+            <td><span class="s3">3</span> Ada modifikasi signifikan dari template</td>
+            <td><span class="s2">2</span> Mengikuti contoh dengan sedikit perubahan</td>
+            <td><span class="s1">1</span> Copy tanpa modifikasi</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- PYTHON NEXT STEPS -->
+  <div style="background:linear-gradient(135deg,#0A0A14,#1A0F33,#0A1628);border-radius:20px;padding:40px;text-align:center;margin-bottom:56px;">
+    <div style="font-size:2.5rem;margin-bottom:12px;">🐍</div>
+    <h3 style="font-size:1.6rem;font-weight:900;color:white;margin-bottom:12px;">Selamat! Kamu Siap Python</h3>
+    <p style="color:#6B7280;max-width:560px;margin:0 auto 32px;line-height:1.75;">
+      Setelah menyelesaikan 24 modul di 3 jenjang, kamu telah membangun fondasi berpikir komputasional yang kuat. Python hanyalah cara baru untuk mengekspresikan logika yang sudah kamu kuasai.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:760px;margin:0 auto;">
+      <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6B7280;letter-spacing:1px;margin-bottom:4px;">LANGKAH SELANJUTNYA</div>
+        <div style="color:white;font-weight:700;font-size:0.85rem;">Python Dasar dengan Turtle Graphics</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6B7280;letter-spacing:1px;margin-bottom:4px;">LANJUTAN</div>
+        <div style="color:white;font-weight:700;font-size:0.85rem;">Pygame untuk Game Development</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6B7280;letter-spacing:1px;margin-bottom:4px;">EKSPLORASI</div>
+        <div style="color:white;font-weight:700;font-size:0.85rem;">Data Science dengan Pandas & Matplotlib</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6B7280;letter-spacing:1px;margin-bottom:4px;">MASA DEPAN</div>
+        <div style="color:white;font-weight:700;font-size:0.85rem;">AI & Machine Learning dengan scikit-learn</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center;padding:24px 20px 20px;border-top:2px solid var(--border);">
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#CBD5E1;letter-spacing:1px;">
+      KURIKULUM SCRATCH → PYTHON · SMA LEVEL 3 · 8 MODUL · 24 PERTEMUAN<br>
+      <span style="color:#4B5563;margin-top:4px;display:block">SD (24 Modul) + SMP (24 Modul) + SMA (24 Modul) = 72 Modul Total · Fondasi Lengkap</span>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

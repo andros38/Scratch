@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurikulum Scratch → Python</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sd: #FF6B35;
+    --sd-light: #FFF0EB;
+    --sd-mid: #FFD4C2;
+    --smp: #3B82F6;
+    --smp-light: #EFF6FF;
+    --smp-mid: #BFDBFE;
+    --sma: #8B5CF6;
+    --sma-light: #F5F3FF;
+    --sma-mid: #DDD6FE;
+    --python: #22C55E;
+    --python-light: #F0FDF4;
+    --dark: #0F172A;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --bg: #F8FAFC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    padding: 64px 32px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,107,53,0.25) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -60px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite reverse;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.4);
+    color: #FF9B6B;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, #FF6B35, #FF9B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    color: #94A3B8;
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    position: relative; z-index: 1;
+    line-height: 1.7;
+  }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .flow-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-badge {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-badge.sd { background: var(--sd); color: white; }
+  .flow-badge.smp { background: var(--smp); color: white; }
+  .flow-badge.sma { background: var(--sma); color: white; }
+  .flow-badge.python { background: var(--python); color: white; }
+  .flow-arrow {
+    color: #475569;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  /* MAIN CONTENT */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  /* LEVEL SECTION */
+  .level-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .level-section:nth-child(2) { animation-delay: 0.1s; }
+  .level-section:nth-child(3) { animation-delay: 0.2s; }
+  .level-section:nth-child(4) { animation-delay: 0.3s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .level-header.sd-header { background: var(--sd-light); border-left: 5px solid var(--sd); }
+  .level-header.smp-header { background: var(--smp-light); border-left: 5px solid var(--smp); }
+  .level-header.sma-header { background: var(--sma-light); border-left: 5px solid var(--sma); }
+
+  .level-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+  .sd-icon { background: var(--sd); }
+  .smp-icon { background: var(--smp); }
+  .sma-icon { background: var(--sma); }
+
+  .level-info h2 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 2px;
+  }
+  .level-info .level-sub {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.65;
+    font-family: 'Space Mono', monospace;
+  }
+  .level-info .level-desc {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-top: 4px;
+  }
+
+  .level-badge-right {
+    margin-left: auto;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+  .sd-badge-right { background: var(--sd-mid); color: #C2410C; }
+  .smp-badge-right { background: var(--smp-mid); color: #1D4ED8; }
+  .sma-badge-right { background: var(--sma-mid); color: #6D28D9; }
+
+  /* MODULE GRID */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .module-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+  }
+  .module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+  .sd .module-card:hover { border-color: var(--sd); }
+  .smp .module-card:hover { border-color: var(--smp); }
+  .sma .module-card:hover { border-color: var(--sma); }
+
+  .module-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .sd .module-num { background: var(--sd-mid); color: #C2410C; }
+  .smp .module-num { background: var(--smp-mid); color: #1D4ED8; }
+  .sma .module-num { background: var(--sma-mid); color: #6D28D9; }
+
+  .module-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .topic-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .topic-list li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.45;
+  }
+  .topic-list li::before {
+    content: '▸';
+    font-size: 0.65rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .sd .topic-list li::before { color: var(--sd); }
+  .smp .topic-list li::before { color: var(--smp); }
+  .sma .topic-list li::before { color: var(--sma); }
+
+  .project-tag {
+    margin-top: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sd .project-tag { background: var(--sd-light); color: #C2410C; }
+  .smp .project-tag { background: var(--smp-light); color: #1D4ED8; }
+  .sma .project-tag { background: var(--sma-light); color: #6D28D9; }
+
+  /* TRANSITION SECTION */
+  .transition-box {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 56px;
+  }
+  .transition-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322C55E' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .transition-box h3 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .transition-box h3 span { color: #4ADE80; }
+  .transition-box p {
+    color: #94A3B8;
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+  .transition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .transition-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+  }
+  .transition-item .t-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: #4ADE80;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .transition-item .t-val {
+    color: white;
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-note strong { color: var(--text); }
+
+  @media (max-width: 600px) {
+    .modules-grid { grid-template-columns: 1fr; }
+    .flow { gap: 4px; }
+    .flow-badge { font-size: 0.78rem; padding: 8px 12px; }
+    .level-badge-right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">KURIKULUM PEMROGRAMAN</div>
+  <h1>Belajar <span>Scratch</span><br>Menuju Python</h1>
+  <p>Kurikulum terstruktur dari SD hingga SMA — membangun logika pemrograman dengan cara yang menyenangkan sebelum beralih ke Python.</p>
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-badge sd">🎮 SD <small style="opacity:.8;font-weight:600">Level 1</small></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">
+      <div class="flow-badge smp">🔧 SMP <small style="opacity:.8;font-weight:600">Level 2</small></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">
+      <div class="flow-badge sma">⚙️ SMA <small style="opacity:.8;font-weight:600">Level 3</small></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">
+      <div class="flow-badge python">🐍 Python</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ SD ============ -->
+  <div class="level-section sd">
+    <div class="level-header sd-header">
+      <div class="level-icon sd-icon">🎮</div>
+      <div class="level-info">
+        <h2 style="color:#C2410C">SD — Level 1: Eksplorasi & Bermain</h2>
+        <div class="level-sub">SEKOLAH DASAR · KELAS 4–6</div>
+        <div class="level-desc">Mengenalkan konsep dasar lewat visual, animasi, dan permainan sederhana</div>
+      </div>
+      <div class="level-badge-right sd-badge-right">8 Modul</div>
+    </div>
+
+    <div class="modules-grid">
+
+      <div class="module-card">
+        <div class="module-num">MODUL 01</div>
+        <div class="module-title">Apa itu Scratch? Mengenal Antarmuka</div>
+        <ul class="topic-list">
+          <li>Mengenal area Stage, Sprite, dan Blok</li>
+          <li>Drag and drop blok perintah</li>
+          <li>Menjalankan & menghentikan program</li>
+          <li>Memilih dan mengganti Sprite</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Sprite bergerak dan berkata "Halo!"</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 02</div>
+        <div class="module-title">Gerak & Animasi Dasar</div>
+        <ul class="topic-list">
+          <li>Blok "gerak" — maju, mundur, putar</li>
+          <li>Ganti kostum untuk animasi berjalan</li>
+          <li>Blok "tunggu" untuk mengatur kecepatan</li>
+          <li>Gerakan memantul di tepi layar</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Animasi hewan berjalan</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 03</div>
+        <div class="module-title">Suara & Efek Visual</div>
+        <ul class="topic-list">
+          <li>Memutar suara dari library</li>
+          <li>Rekam suara sendiri</li>
+          <li>Efek grafis (warna, ukuran, transparansi)</li>
+          <li>Ganti background cerita</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Cerita animasi bersound effect</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 04</div>
+        <div class="module-title">Kontrol Keyboard & Mouse</div>
+        <ul class="topic-list">
+          <li>Blok "jika tombol ... ditekan"</li>
+          <li>Menggerakkan sprite dengan panah keyboard</li>
+          <li>Klik mouse untuk trigger aksi</li>
+          <li>Sprite mengikuti kursor</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Karakter yang bisa dikontrol pemain</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 05</div>
+        <div class="module-title">Pengenalan Kondisi (If-Then)</div>
+        <ul class="topic-list">
+          <li>Konsep "jika ini terjadi, maka lakukan itu"</li>
+          <li>Blok "jika ... maka ..."</li>
+          <li>Deteksi menyentuh warna / sprite lain</li>
+          <li>Perbedaan aksi ya dan tidak</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Sprite bereaksi saat menyentuh benda</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 06</div>
+        <div class="module-title">Pengulangan (Loop Dasar)</div>
+        <ul class="topic-list">
+          <li>Kenapa perlu pengulangan?</li>
+          <li>Blok "ulangi ... kali"</li>
+          <li>Blok "ulangi selamanya"</li>
+          <li>Animasi berulang otomatis</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Animasi hujan / bintang berkelip</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 07</div>
+        <div class="module-title">Variabel Sederhana & Skor</div>
+        <ul class="topic-list">
+          <li>Apa itu variabel? (kotak penyimpan angka)</li>
+          <li>Membuat dan menampilkan variabel Skor</li>
+          <li>Menambah dan mengurangi nilai</li>
+          <li>Menampilkan nilai di layar</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Counter klik — klik sprite tambah poin</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 08</div>
+        <div class="module-title">Proyek Akhir SD: Game Mini</div>
+        <ul class="topic-list">
+          <li>Menggabungkan semua konsep</li>
+          <li>Desain karakter & latar sendiri</li>
+          <li>Menambah kondisi menang/kalah</li>
+          <li>Presentasi game ke teman</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Game tangkap benda jatuh dari langit</div>
+      </div>
+
+    </div>
+  </div><!-- /SD -->
+
+  <!-- ============ SMP ============ -->
+  <div class="level-section smp">
+    <div class="level-header smp-header">
+      <div class="level-icon smp-icon">🔧</div>
+      <div class="level-info">
+        <h2 style="color:#1D4ED8">SMP — Level 2: Logika & Struktur</h2>
+        <div class="level-sub">SEKOLAH MENENGAH PERTAMA · KELAS 7–9</div>
+        <div class="level-desc">Membangun logika berpikir terstruktur, kondisi kompleks, dan proyek kolaboratif</div>
+      </div>
+      <div class="level-badge-right smp-badge-right">8 Modul</div>
+    </div>
+
+    <div class="modules-grid">
+
+      <div class="module-card">
+        <div class="module-num">MODUL 01</div>
+        <div class="module-title">Review & Pendalaman Konsep Dasar</div>
+        <ul class="topic-list">
+          <li>Recap blok gerak, suara, tampilan</li>
+          <li>Pengenalan mode Turbo & debugging</li>
+          <li>Membaca script yang sudah ada</li>
+          <li>Kebiasaan: komentar pada blok kode</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Analisis & perbaiki kode yang bermasalah</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 02</div>
+        <div class="module-title">Kondisi Kompleks (If-Else & And/Or)</div>
+        <ul class="topic-list">
+          <li>Blok "jika ... maka ... jika tidak ..."</li>
+          <li>Operator logika: AND, OR, NOT</li>
+          <li>Kondisi bersarang (nested if)</li>
+          <li>Perbandingan nilai: &lt; &gt; =</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Kuis dengan pilihan benar/salah bertingkat</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 03</div>
+        <div class="module-title">Loop Lanjutan & Pola</div>
+        <ul class="topic-list">
+          <li>Blok "ulangi sampai ..."</li>
+          <li>Loop bersarang untuk pola grid</li>
+          <li>Menggambar pola dengan pena</li>
+          <li>Spiral, segi-n, dan fraktal sederhana</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Menggambar pola geometri dengan kode</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 04</div>
+        <div class="module-title">Variabel, Input & Tipe Data</div>
+        <ul class="topic-list">
+          <li>Variabel lokal vs global</li>
+          <li>Blok "tanyakan dan tunggu" untuk input user</li>
+          <li>Menyimpan jawaban di variabel</li>
+          <li>Operasi matematika pada variabel</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Kalkulator sederhana interaktif</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 05</div>
+        <div class="module-title">List (Array Dasar)</div>
+        <ul class="topic-list">
+          <li>Konsep list — kumpulan data dalam satu tempat</li>
+          <li>Tambah, hapus, dan baca item dari list</li>
+          <li>Iterasi melalui list</li>
+          <li>Cek apakah item ada di list</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Daftar belanja / kamus kata sederhana</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 06</div>
+        <div class="module-title">Custom Blok (Fungsi/Prosedur)</div>
+        <ul class="topic-list">
+          <li>Mengapa memecah kode jadi blok-blok kecil?</li>
+          <li>Membuat blok kustom sendiri</li>
+          <li>Blok dengan parameter input</li>
+          <li>Prinsip DRY: Don't Repeat Yourself</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Game dengan fungsi lompat, tembak, mati</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 07</div>
+        <div class="module-title">Pesan (Events & Broadcasting)</div>
+        <ul class="topic-list">
+          <li>Komunikasi antar sprite via pesan</li>
+          <li>Broadcast & receive message</li>
+          <li>Koordinasi multi-sprite dengan timing</li>
+          <li>Membangun alur cerita interaktif</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Cerita interaktif dengan banyak karakter</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 08</div>
+        <div class="module-title">Proyek Akhir SMP: Game Lengkap</div>
+        <ul class="topic-list">
+          <li>Desain sistem: level, nyawa, skor tinggi</li>
+          <li>Implementasi multiple screens (menu, game, game over)</li>
+          <li>Playtesting dan iterasi</li>
+          <li>Dokumentasi & presentasi proyek</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Platform game atau puzzle game 2D</div>
+      </div>
+
+    </div>
+  </div><!-- /SMP -->
+
+  <!-- ============ SMA ============ -->
+  <div class="level-section sma">
+    <div class="level-header sma-header">
+      <div class="level-icon sma-icon">⚙️</div>
+      <div class="level-info">
+        <h2 style="color:#6D28D9">SMA — Level 3: Algoritma & Siap Python</h2>
+        <div class="level-sub">SEKOLAH MENENGAH ATAS · KELAS 10–12</div>
+        <div class="level-desc">Memahami algoritma, struktur data, dan pola yang langsung paralel dengan Python</div>
+      </div>
+      <div class="level-badge-right sma-badge-right">8 Modul</div>
+    </div>
+
+    <div class="modules-grid">
+
+      <div class="module-card">
+        <div class="module-num">MODUL 01</div>
+        <div class="module-title">Algoritma & Pseudocode</div>
+        <ul class="topic-list">
+          <li>Apa itu algoritma? (langkah logis menyelesaikan masalah)</li>
+          <li>Menulis pseudocode sebelum koding</li>
+          <li>Flowchart → Scratch → nanti Python</li>
+          <li>Kompleksitas: solusi efisien vs tidak efisien</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Implementasi algoritma pencarian sederhana</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 02</div>
+        <div class="module-title">Struktur Data: List & Stack</div>
+        <ul class="topic-list">
+          <li>List sebagai stack (LIFO) di Scratch</li>
+          <li>Push dan pop operasi manual</li>
+          <li>List sebagai queue (FIFO)</li>
+          <li>Aplikasi nyata: undo/redo, antrian</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Simulasi antrian kasir / undo system</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 03</div>
+        <div class="module-title">Algoritma Sorting & Searching</div>
+        <ul class="topic-list">
+          <li>Bubble sort visual dengan Scratch</li>
+          <li>Linear search step-by-step</li>
+          <li>Visualisasi: melihat algoritma "bekerja"</li>
+          <li>Perbandingan jumlah langkah tiap metode</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Sorting visualizer animasi nyata</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 04</div>
+        <div class="module-title">Rekursi & Fraktal</div>
+        <ul class="topic-list">
+          <li>Konsep "fungsi memanggil dirinya sendiri"</li>
+          <li>Rekursi dengan custom blok di Scratch</li>
+          <li>Menggambar pohon fraktal & Sierpinski</li>
+          <li>Base case dan stack overflow</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Pohon fraktal generatif dengan pena</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 05</div>
+        <div class="module-title">Simulasi & Pemodelan</div>
+        <ul class="topic-list">
+          <li>Simulasi fisika: gravitasi, pantulan, gesekan</li>
+          <li>Random number untuk perilaku acak</li>
+          <li>Agen sederhana: flocking / boids</li>
+          <li>Cellular automata dasar (Game of Life)</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Simulasi bola biliar atau partikel</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 06</div>
+        <div class="module-title">Pola Desain: OOP Konseptual</div>
+        <ul class="topic-list">
+          <li>Sprite sebagai "objek" dengan properti & perilaku</li>
+          <li>Kloning sprite = instansiasi objek</li>
+          <li>Pesan = method call antar objek</li>
+          <li>Bridging ke konsep class & object di Python</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Game dengan musuh ber-AI yang di-clone</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 07</div>
+        <div class="module-title">Scratch ↔ Python: Jembatan Transisi</div>
+        <ul class="topic-list">
+          <li>Pemetaan blok Scratch → sintaks Python</li>
+          <li>if/else, for loop, while loop dalam Python</li>
+          <li>Fungsi di Python vs Custom Blok</li>
+          <li>List di Scratch vs List di Python</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: Tulis ulang game Scratch sederhana ke Python</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">MODUL 08</div>
+        <div class="module-title">Proyek Akhir SMA: Capstone Project</div>
+        <ul class="topic-list">
+          <li>Desain proyek orisinal dari nol</li>
+          <li>Gunakan algoritma yang dipelajari</li>
+          <li>Dokumentasi teknis & user guide</li>
+          <li>Demo & pitching ke audiens</li>
+        </ul>
+        <div class="project-tag">🎯 Proyek: AI sederhana / simulasi ilmiah / aplikasi edukatif</div>
+      </div>
+
+    </div>
+  </div><!-- /SMA -->
+
+  <!-- TRANSITION -->
+  <div class="transition-box">
+    <h3>🐍 Siap Migrasi ke <span>Python</span></h3>
+    <p>Setelah menyelesaikan Level 3 SMA, siswa sudah memahami inti berpikir komputasional. Python hanyalah bahasa baru untuk logika yang sudah dikuasai.</p>
+    <div class="transition-grid">
+      <div class="transition-item">
+        <div class="t-label">SCRATCH BLOK</div>
+        <div class="t-val">Custom Blok dengan parameter</div>
+      </div>
+      <div class="transition-item">
+        <div class="t-label">PYTHON</div>
+        <div class="t-val">def namaFungsi(parameter):</div>
+      </div>
+      <div class="transition-item">
+        <div class="t-label">SCRATCH BLOK</div>
+        <div class="t-val">Ulangi sampai [kondisi]</div>
+      </div>
+      <div class="transition-item">
+        <div class="t-label">PYTHON</div>
+        <div class="t-val">while kondisi: ...</div>
+      </div>
+      <div class="transition-item">
+        <div class="t-label">SCRATCH BLOK</div>
+        <div class="t-val">List + Tambah/Hapus item</div>
+      </div>
+      <div class="transition-item">
+        <div class="t-label">PYTHON</div>
+        <div class="t-val">list.append() / list.remove()</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer-note">
+  <strong>Kurikulum Scratch → Python</strong> · Disusun untuk jenjang SD, SMP, dan SMA · Total <strong>24 Modul</strong> · Setiap modul ~2–3 pertemuan
+</div>
+
+</body>
+</html>
